@@ -9,6 +9,7 @@ const SnakeGame = lazy(() => import("@/games/snake"));
 const PongGame = lazy(() => import("@/games/pong"));
 const Game2048 = lazy(() => import("@/games/g2048"));
 const TicTacToe = lazy(() => import("@/games/tictactoe"));
+const MemoryGame = lazy(() => import("@/games/memory"));
 
 export const Route = createFileRoute("/games/$gameId")({
   head: ({ params }) => {
@@ -81,6 +82,10 @@ function GameRoute() {
         <div className="glass rounded-2xl p-4 md:p-6 ring-1 ring-white/10">
           {!game.available ? (
             <ComingSoon />
+          ) : game.id === "memory" ? (
+            <Suspense fallback={<div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading cabinet…</div>}>
+              <MemoryGame />
+            </Suspense>
           ) : (
             <PlayerNameGate gameName={game.name}>
               {() => (
