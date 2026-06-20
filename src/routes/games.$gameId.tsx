@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getGame } from "@/lib/games";
 import { lazy, Suspense } from "react";
+import { PlayerNameGate } from "@/components/player-name-gate";
 
 const TetrisGame = lazy(() => import("@/games/tetris"));
 const SnakeGame = lazy(() => import("@/games/snake"));
@@ -81,13 +82,17 @@ function GameRoute() {
           {!game.available ? (
             <ComingSoon />
           ) : (
-            <Suspense fallback={<div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading cabinet…</div>}>
-              {game.id === "tetris" && <TetrisGame />}
-              {game.id === "snake" && <SnakeGame />}
-              {game.id === "pong" && <PongGame />}
-              {game.id === "2048" && <Game2048 />}
-              {game.id === "tictactoe" && <TicTacToe />}
-            </Suspense>
+            <PlayerNameGate gameName={game.name}>
+              {() => (
+                <Suspense fallback={<div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading cabinet…</div>}>
+                  {game.id === "tetris" && <TetrisGame />}
+                  {game.id === "snake" && <SnakeGame />}
+                  {game.id === "pong" && <PongGame />}
+                  {game.id === "2048" && <Game2048 />}
+                  {game.id === "tictactoe" && <TicTacToe />}
+                </Suspense>
+              )}
+            </PlayerNameGate>
           )}
         </div>
       </main>
