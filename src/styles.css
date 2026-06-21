@@ -99,6 +99,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
@@ -108,6 +110,9 @@
     background-attachment: fixed;
     min-height: 100vh;
   }
+
+  button, a { touch-action: manipulation; }
+  /* Allow vertical scrolling on the page while we capture swipes inside specific game boards via JS */
 
   /* Subtle scanline overlay */
   body::before {
@@ -157,12 +162,13 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.875rem 1.75rem;
+  padding: 0.75rem 1.25rem;
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  min-height: 44px;
   border-radius: 0.5rem;
   background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
   color: oklch(0.1 0.02 270);
@@ -174,6 +180,10 @@
     transform: translateY(-2px);
     box-shadow: 0 0 30px oklch(0.84 0.18 215 / 0.7), 0 0 60px oklch(0.7 0.28 348 / 0.4);
   }
+  @media (min-width: 640px) {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.875rem;
+  }
 }
 
 @utility btn-ghost-neon {
@@ -181,12 +191,13 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.875rem 1.75rem;
+  padding: 0.75rem 1.25rem;
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  min-height: 44px;
   border-radius: 0.5rem;
   background: oklch(1 0 0 / 0.05);
   color: var(--neon-cyan);
@@ -197,6 +208,10 @@
   &:hover {
     background: oklch(0.84 0.18 215 / 0.12);
     box-shadow: 0 0 18px oklch(0.84 0.18 215 / 0.5);
+  }
+  @media (min-width: 640px) {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.875rem;
   }
 }
 

@@ -152,17 +152,17 @@ function MemoryBoard({ p1, p2, onReset }: { p1: string; p2: string; onReset: () 
         })}
       </div>
 
-      <div key={round} className="grid grid-cols-4 gap-2 sm:gap-3">
+      <div key={round} className="grid grid-cols-4 gap-1.5 sm:gap-3 max-w-md mx-auto w-full">
         {cards.map((c) => (
           <button
             key={c.id}
             onClick={() => onFlip(c.id)}
             disabled={c.matched || lock}
             aria-label={c.flipped || c.matched ? `Card ${c.food}` : "Hidden card"}
-            className={`aspect-square rounded-lg border text-3xl sm:text-4xl flex items-center justify-center transition-all duration-200 ${
+            className={`aspect-square rounded-lg border text-2xl sm:text-4xl flex items-center justify-center transition-all duration-200 ${
               c.flipped || c.matched
                 ? "bg-white/10 border-white/20"
-                : "bg-gradient-to-br from-black/60 to-black/30 border-white/10 hover:border-neon-cyan/60"
+                : "bg-gradient-to-br from-black/60 to-black/30 border-white/10 hover:border-neon-cyan/60 active:scale-95"
             } ${c.matched ? "opacity-70" : ""}`}
           >
             {c.flipped || c.matched ? c.food : <span className="font-display text-neon-yellow/70">?</span>}

@@ -67,16 +67,16 @@ export default function TicTacToe() {
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_auto] items-start">
-      <div className="mx-auto">
-        <div className="grid gap-2 grid-cols-3 p-3 bg-black/60 rounded-xl ring-1 ring-neon-purple/30" style={{ boxShadow: "0 0 30px oklch(0.65 0.24 300 / 0.25)" }}>
+      <div className="mx-auto w-full max-w-md md:max-w-none">
+        <div className="grid gap-2 grid-cols-3 p-3 mx-auto w-fit bg-black/60 rounded-xl ring-1 ring-neon-purple/30" style={{ boxShadow: "0 0 30px oklch(0.65 0.24 300 / 0.25)" }}>
           {board.map((c, i) => {
             const inWin = line?.includes(i);
             return (
               <button
                 key={i} onClick={() => onCell(i)} disabled={!!c || done || turn !== "X"}
-                className="grid place-items-center rounded-lg transition-all font-display font-black text-5xl"
+                className="grid place-items-center rounded-lg transition-all font-display font-black text-4xl sm:text-5xl"
                 style={{
-                  width: "clamp(72px, 18vw, 110px)", height: "clamp(72px, 18vw, 110px)",
+                  width: "clamp(64px, 22vw, 110px)", height: "clamp(64px, 22vw, 110px)",
                   background: inWin ? "oklch(0.65 0.24 300 / 0.3)" : "rgba(255,255,255,0.05)",
                   color: c === "X" ? "#00F5FF" : c === "O" ? "#FF00AA" : "transparent",
                   textShadow: c ? `0 0 12px currentColor` : "none",
@@ -93,12 +93,12 @@ export default function TicTacToe() {
           {!done && <span className="text-muted-foreground text-sm">{turn === "X" ? "Your move" : "CPU thinking…"}</span>}
         </div>
       </div>
-      <aside className="grid gap-3 md:w-56">
+      <aside className="grid gap-3 grid-cols-3 md:grid-cols-1 md:w-56">
         <Stat label="Wins" value={stats.w} cls="neon-text-cyan" />
         <Stat label="Losses" value={stats.l} cls="neon-text-magenta" />
         <Stat label="Draws" value={stats.d} cls="text-neon-yellow" />
-        <button onClick={reset} className="btn-ghost-neon !text-xs">New Game</button>
-        <button onClick={() => setStats({ w: 0, l: 0, d: 0 })} className="text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline">Reset record</button>
+        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-3 md:col-span-1">New Game</button>
+        <button onClick={() => setStats({ w: 0, l: 0, d: 0 })} className="text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline col-span-3 md:col-span-1">Reset record</button>
       </aside>
     </div>
   );

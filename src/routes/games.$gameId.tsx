@@ -67,19 +67,19 @@ function GameRoute() {
   return (
     <div className="relative z-10 min-h-screen flex flex-col">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 flex-1">
-        <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-          <div>
-            <Link to="/games" className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-neon-cyan">← Arcade</Link>
-            <h1 className="mt-2 font-display text-3xl md:text-4xl font-black neon-text-cyan">{game.name}</h1>
-            <p className="text-sm text-muted-foreground">{game.tagline}</p>
+      <main className="mx-auto w-full max-w-6xl px-3 sm:px-6 py-6 sm:py-8 flex-1">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] sm:flex sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-5 sm:mb-6">
+          <div className="min-w-0">
+            <Link to="/games" className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-muted-foreground hover:text-neon-cyan">← Arcade</Link>
+            <h1 className="mt-1 sm:mt-2 font-display text-2xl sm:text-3xl md:text-4xl font-black neon-text-cyan truncate">{game.name}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">{game.tagline}</p>
           </div>
-          <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-            {game.category} · {game.difficulty} · {game.players}
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground text-right shrink-0">
+            {game.category}<br className="sm:hidden" /><span className="hidden sm:inline"> · </span>{game.difficulty}<span className="sm:inline"> · </span>{game.players}
           </div>
         </div>
 
-        <div className="glass rounded-2xl p-4 md:p-6 ring-1 ring-white/10">
+        <div className="glass rounded-2xl p-3 sm:p-4 md:p-6 ring-1 ring-white/10 overflow-hidden">
           {!game.available ? (
             <ComingSoon />
           ) : game.id === "memory" ? (

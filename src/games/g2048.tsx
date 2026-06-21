@@ -148,9 +148,9 @@ export default function G2048() {
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_auto] items-start">
-      <div className="mx-auto">
+      <div className="mx-auto w-full max-w-md md:max-w-none">
         <div
-          className="relative inline-block rounded-xl p-3 bg-black/60 ring-1 ring-neon-yellow/30"
+          className="relative mx-auto inline-block rounded-xl p-3 bg-black/60 ring-1 ring-neon-yellow/30 touch-none select-none"
           style={{ boxShadow: "0 0 30px oklch(0.92 0.18 100 / 0.25)" }}
           onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
         >
@@ -161,9 +161,9 @@ export default function G2048() {
                 return (
                   <div key={`${x}-${y}`} className="grid place-items-center rounded-lg font-display font-black transition-all"
                     style={{
-                      width: "clamp(56px, 14vw, 90px)", height: "clamp(56px, 14vw, 90px)",
+                      width: "clamp(48px, 18vw, 90px)", height: "clamp(48px, 18vw, 90px)",
                       background: c.bg, color: c.fg,
-                      fontSize: v >= 1024 ? "1.25rem" : v >= 128 ? "1.5rem" : "1.75rem",
+                      fontSize: v >= 1024 ? "1.1rem" : v >= 128 ? "1.35rem" : "1.6rem",
                       boxShadow: v ? `0 0 12px ${c.fg}55, inset 0 0 0 1px ${c.fg}40` : "none",
                     }}>
                     {v || ""}
@@ -174,22 +174,30 @@ export default function G2048() {
           </div>
           {over && (
             <div className="absolute inset-0 grid place-items-center bg-black/70 rounded-xl">
-              <div className="text-center">
-                <div className="font-display text-3xl font-black neon-text-magenta">GAME OVER</div>
+              <div className="text-center px-4">
+                <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">GAME OVER</div>
                 <button onClick={reset} className="btn-neon mt-4">Try Again</button>
               </div>
             </div>
           )}
         </div>
-        <p className="mt-3 text-center text-xs font-mono uppercase tracking-widest text-muted-foreground">
-          arrows / WASD · swipe on mobile · progress saved
+        <div className="mt-4 grid grid-cols-3 gap-2 max-w-[16rem] mx-auto md:hidden">
+          <span />
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => doMove("U")} aria-label="Up">↑</button>
+          <span />
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => doMove("L")} aria-label="Left">←</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => doMove("D")} aria-label="Down">↓</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => doMove("R")} aria-label="Right">→</button>
+        </div>
+        <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          arrows / WASD · swipe · progress saved
         </p>
       </div>
 
-      <aside className="grid gap-3 md:w-56">
+      <aside className="grid gap-3 grid-cols-2 md:grid-cols-1 md:w-56">
         <Stat label="Score" value={score} cls="text-neon-yellow" />
         <Stat label="Best" value={highScore} cls="neon-text-magenta" />
-        <button onClick={reset} className="btn-ghost-neon !text-xs">New Game</button>
+        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1">New Game</button>
       </aside>
     </div>
   );
