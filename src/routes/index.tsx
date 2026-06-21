@@ -31,31 +31,31 @@ function HomePage() {
         <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-neon-magenta/30 blur-3xl animate-pulse-glow" aria-hidden />
         <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-neon-cyan/30 blur-3xl animate-pulse-glow" aria-hidden />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-20 md:py-32 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-[10px] font-mono uppercase tracking-[0.3em] text-neon-cyan">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-neon-cyan animate-pulse" />
               Now playing · 5 games live
             </div>
-            <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05]">
+            <h1 className="mt-6 font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05]">
               Play <span className="neon-text-cyan">Legendary</span><br />
               Retro Games <span className="neon-text-magenta">Online</span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl">
+            <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-xl">
               A neon-soaked arcade for the classics. Drop a quarter, no quarter required —
               just open and play. Progress saves automatically.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
               <Link to="/games" className="btn-neon">▶ Play Now</Link>
               <a href="#featured" className="btn-ghost-neon">Browse Games</a>
             </div>
-            <div className="mt-8 flex flex-wrap items-center gap-6 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">
               <span>● 60 FPS</span><span>● Offline saves</span><span>● Mobile ready</span>
             </div>
           </div>
 
           {/* Arcade cabinet */}
-          <div className="relative mx-auto w-full max-w-md aspect-[3/4] animate-float-slow">
+          <div className="relative mx-auto w-full max-w-[18rem] sm:max-w-sm md:max-w-md aspect-[3/4] animate-float-slow order-first md:order-none">
             <ArcadeCabinet />
           </div>
         </div>
@@ -73,17 +73,17 @@ function HomePage() {
       </section>
 
       {/* FEATURED */}
-      <section id="featured" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <section id="featured" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
         <SectionHeading kicker="Featured" title="Tonight's hot tables" />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 sm:mt-10 grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((g) => <GameCard key={g.id} game={g} />)}
         </div>
       </section>
 
       {/* CATEGORIES */}
-      <section id="categories" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <section id="categories" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
         <SectionHeading kicker="Browse" title="Pick your poison" />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {CATEGORIES.map((c, i) => (
             <Link key={c} to="/games" className={`group glass rounded-xl p-6 transition-all hover:-translate-y-1 ring-1 ring-white/10 hover:ring-neon-cyan/50`}>
               <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">0{i + 1}</div>
@@ -95,20 +95,20 @@ function HomePage() {
       </section>
 
       {/* STATS */}
-      <section id="stats" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <section id="stats" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
         <SectionHeading kicker="By the numbers" title="The arcade in motion" />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {[
             { v: "5", l: "Games live", c: "cyan" as const },
             { v: "15+", l: "Coming soon", c: "magenta" as const },
             { v: "60", l: "FPS target", c: "yellow" as const },
             { v: "∞", l: "High scores", c: "green" as const },
           ].map((s) => (
-            <div key={s.l} className="glass rounded-xl p-6 text-center ring-1 ring-white/10">
-              <div className={`font-display text-5xl font-black ${
+            <div key={s.l} className="glass rounded-xl p-4 sm:p-6 text-center ring-1 ring-white/10">
+              <div className={`font-display text-4xl sm:text-5xl font-black ${
                 s.c === "cyan" ? "neon-text-cyan" : s.c === "magenta" ? "neon-text-magenta" : s.c === "yellow" ? "text-neon-yellow" : "text-neon-green"
               }`}>{s.v}</div>
-              <div className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">{s.l}</div>
+              <div className="mt-2 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">{s.l}</div>
             </div>
           ))}
         </div>
