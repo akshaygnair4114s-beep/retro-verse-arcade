@@ -73,12 +73,12 @@ export default function Snake() {
     return () => clearInterval(id);
   }, [over, paused, score, food, submit]);
 
-  const cellPx = "clamp(14px, 3.5vw, 22px)";
+  const cellPx = "clamp(11px, 4vw, 22px)";
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_auto] items-start">
-      <div className="mx-auto">
-        <div className="relative inline-block rounded-lg p-2 bg-black/60 ring-1 ring-neon-green/30" style={{ boxShadow: "0 0 30px oklch(0.85 0.22 145 / 0.25)" }}>
+      <div className="mx-auto w-full max-w-md md:max-w-none">
+        <div className="relative mx-auto inline-block rounded-lg p-2 bg-black/60 ring-1 ring-neon-green/30 touch-none select-none" style={{ boxShadow: "0 0 30px oklch(0.85 0.22 145 / 0.25)" }}>
           <div className="grid relative grid-bg" style={{ gridTemplateColumns: `repeat(${SIZE}, ${cellPx})`, gap: 1 }}>
             {Array.from({ length: SIZE * SIZE }).map((_, i) => {
               const x = i % SIZE, y = Math.floor(i / SIZE);
@@ -97,31 +97,32 @@ export default function Snake() {
           </div>
           {(over || paused) && (
             <div className="absolute inset-0 grid place-items-center bg-black/70 rounded-lg">
-              <div className="text-center">
-                <div className="font-display text-3xl font-black neon-text-magenta">{over ? "GAME OVER" : "PAUSED"}</div>
+              <div className="text-center px-4">
+                <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">{over ? "GAME OVER" : "PAUSED"}</div>
                 {over && <button onClick={reset} className="btn-neon mt-4">Play Again</button>}
+                {!over && paused && <button onClick={() => setPaused(false)} className="btn-neon mt-4">Resume</button>}
               </div>
             </div>
           )}
         </div>
-        <div className="mt-3 grid grid-cols-3 gap-2 max-w-xs mx-auto md:hidden">
+        <div className="mt-4 grid grid-cols-3 gap-2 max-w-[16rem] mx-auto md:hidden">
           <span />
-          <button className="btn-ghost-neon !py-2" onClick={() => turn({ x: 0, y: -1 })}>↑</button>
-          <span />
-          <button className="btn-ghost-neon !py-2" onClick={() => turn({ x: -1, y: 0 })}>←</button>
-          <button className="btn-ghost-neon !py-2" onClick={() => turn({ x: 0, y: 1 })}>↓</button>
-          <button className="btn-ghost-neon !py-2" onClick={() => turn({ x: 1, y: 0 })}>→</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => turn({ x: 0, y: -1 })} aria-label="Up">↑</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={() => setPaused((p) => !p)} aria-label="Pause">{paused ? "▶" : "⏸"}</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => turn({ x: -1, y: 0 })} aria-label="Left">←</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => turn({ x: 0, y: 1 })} aria-label="Down">↓</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => turn({ x: 1, y: 0 })} aria-label="Right">→</button>
         </div>
-        <p className="mt-3 text-center text-xs font-mono uppercase tracking-widest text-muted-foreground">
+        <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground hidden md:block">
           arrows / WASD · P to pause
         </p>
       </div>
 
-      <aside className="grid gap-3 md:w-56">
+      <aside className="grid gap-3 grid-cols-3 md:grid-cols-1 md:w-56">
         <Stat label="Score" value={score} cls="neon-text-cyan" />
         <Stat label="High Score" value={highScore} cls="neon-text-magenta" />
         <Stat label="Length" value={snake.length} cls="text-neon-green" />
-        <button onClick={reset} className="btn-ghost-neon !text-xs">New Game</button>
+        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-3 md:col-span-1">New Game</button>
       </aside>
     </div>
   );

@@ -158,9 +158,9 @@ export default function Tetris() {
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_auto] items-start">
-      <div className="mx-auto">
+      <div className="mx-auto w-full max-w-md md:max-w-none">
         <div
-          className="relative inline-block rounded-lg p-2 bg-black/60 ring-1 ring-neon-cyan/30"
+          className="relative mx-auto inline-block rounded-lg p-2 bg-black/60 ring-1 ring-neon-cyan/30 touch-none select-none"
           style={{ boxShadow: "0 0 30px oklch(0.84 0.18 215 / 0.3)" }}
         >
           <div className="grid" style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`, gap: 2 }}>
@@ -170,7 +170,7 @@ export default function Tetris() {
                   key={`${x}-${y}`}
                   className="aspect-square"
                   style={{
-                    width: "clamp(16px, 4.5vw, 28px)",
+                    width: "clamp(12px, 7vw, 28px)",
                     background: cell ? COLORS[cell] : "rgba(255,255,255,0.04)",
                     boxShadow: cell ? `0 0 8px ${COLORS[cell]}, inset 0 0 4px rgba(255,255,255,0.4)` : "none",
                     borderRadius: 3,
@@ -181,24 +181,36 @@ export default function Tetris() {
           </div>
           {(over || paused) && (
             <div className="absolute inset-0 grid place-items-center bg-black/70 rounded-lg">
-              <div className="text-center">
-                <div className="font-display text-3xl font-black neon-text-magenta">{over ? "GAME OVER" : "PAUSED"}</div>
+              <div className="text-center px-4">
+                <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">{over ? "GAME OVER" : "PAUSED"}</div>
                 {over && <button onClick={reset} className="btn-neon mt-4">Play Again</button>}
+                {!over && paused && <button onClick={() => setPaused(false)} className="btn-neon mt-4">Resume</button>}
               </div>
             </div>
           )}
         </div>
-        <p className="mt-3 text-center text-xs font-mono uppercase tracking-widest text-muted-foreground">
+
+        {/* Mobile touch controls */}
+        <div className="mt-4 grid grid-cols-3 gap-2 max-w-xs mx-auto md:hidden">
+          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={() => tryMove(0, 0, rotate(pieceRef.current.shape))} aria-label="Rotate">⟳</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={hardDrop} aria-label="Hard drop">⤓</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={() => setPaused((p) => !p)} aria-label="Pause">{paused ? "▶" : "⏸"}</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => tryMove(-1, 0)} aria-label="Left">←</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => drop()} aria-label="Soft drop">↓</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => tryMove(1, 0)} aria-label="Right">→</button>
+        </div>
+
+        <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground hidden md:block">
           ← → move · ↑ rotate · ↓ soft drop · space hard drop · p pause
         </p>
       </div>
 
-      <aside className="grid gap-3 md:w-56">
+      <aside className="grid gap-3 grid-cols-2 md:grid-cols-1 md:w-56">
         <Stat label="Score" value={score} accent="cyan" />
         <Stat label="High Score" value={highScore} accent="magenta" />
         <Stat label="Level" value={level} accent="yellow" />
         <Stat label="Lines" value={lines} accent="green" />
-        <div className="glass rounded-lg p-3 ring-1 ring-white/10">
+        <div className="glass rounded-lg p-3 ring-1 ring-white/10 col-span-2 md:col-span-1">
           <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Next</div>
           <div className="grid gap-0.5 mx-auto w-fit" style={{ gridTemplateColumns: `repeat(${next.shape[0].length}, 18px)` }}>
             {next.shape.flatMap((row, y) =>
@@ -208,7 +220,7 @@ export default function Tetris() {
             )}
           </div>
         </div>
-        <button onClick={reset} className="btn-ghost-neon !text-xs">New Game</button>
+        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1">New Game</button>
       </aside>
     </div>
   );
