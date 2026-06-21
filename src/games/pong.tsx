@@ -112,20 +112,38 @@ export default function Pong() {
     };
   }, [running, submit]);
 
+  const setPaddleDir = (up: boolean, down: boolean) => {
+    // Mobile button helpers — dispatch synthetic key events to existing handler
+    const key = up ? "ArrowUp" : down ? "ArrowDown" : null;
+    if (!key) return;
+    window.dispatchEvent(new KeyboardEvent("keydown", { key }));
+    setTimeout(() => window.dispatchEvent(new KeyboardEvent("keyup", { key })), 120);
+  };
+
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_auto] items-start">
       <div className="mx-auto w-full max-w-2xl">
-        <canvas ref={canvasRef} width={W} height={H} className="w-full rounded-lg ring-1 ring-neon-cyan/30" style={{ boxShadow: "0 0 30px oklch(0.84 0.18 215 / 0.3)" }} />
-        <p className="mt-3 text-center text-xs font-mono uppercase tracking-widest text-muted-foreground">
-          mouse / ↑↓ / W S to move · first to outlast the AI
+        <canvas
+          ref={canvasRef}
+          width={W}
+          height={H}
+          className="w-full rounded-lg ring-1 ring-neon-cyan/30 touch-none select-none"
+          style={{ boxShadow: "0 0 30px oklch(0.84 0.18 215 / 0.3)", aspectRatio: `${W} / ${H}`, height: "auto" }}
+        />
+        <div className="mt-4 grid grid-cols-2 gap-2 max-w-xs mx-auto md:hidden">
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => setPaddleDir(true, false)} aria-label="Up">↑</button>
+          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => setPaddleDir(false, true)} aria-label="Down">↓</button>
+        </div>
+        <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          touch / drag · mouse · ↑↓ / W S · outlast the AI
         </p>
       </div>
-      <aside className="grid gap-3 md:w-56">
+      <aside className="grid gap-3 grid-cols-3 md:grid-cols-1 md:w-56">
         <Stat label="You" value={score.p} cls="neon-text-cyan" />
         <Stat label="CPU" value={score.ai} cls="neon-text-magenta" />
         <Stat label="High Score" value={highScore} cls="text-neon-yellow" />
-        <button onClick={() => { setScore({ p: 0, ai: 0 }); setRunning(true); }} className="btn-ghost-neon !text-xs">Reset</button>
-        <button onClick={() => setRunning((r) => !r)} className="btn-ghost-neon !text-xs">{running ? "Pause" : "Resume"}</button>
+        <button onClick={() => { setScore({ p: 0, ai: 0 }); setRunning(true); }} className="btn-ghost-neon !text-xs col-span-3 md:col-span-1">Reset</button>
+        <button onClick={() => setRunning((r) => !r)} className="btn-ghost-neon !text-xs col-span-3 md:col-span-1">{running ? "Pause" : "Resume"}</button>
       </aside>
     </div>
   );
