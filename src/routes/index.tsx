@@ -35,7 +35,7 @@ function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-[10px] font-mono uppercase tracking-[0.3em] text-neon-cyan">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-neon-cyan animate-pulse" />
-              Now playing · 5 games live
+              Now playing · 6 games live
             </div>
             <h1 className="mt-6 font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05]">
               Play <span className="neon-text-cyan">Legendary</span><br />
@@ -99,7 +99,7 @@ function HomePage() {
         <SectionHeading kicker="By the numbers" title="The arcade in motion" />
         <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {[
-            { v: "5", l: "Games live", c: "cyan" as const },
+            { v: "6", l: "Games live", c: "cyan" as const },
             { v: "15+", l: "Coming soon", c: "magenta" as const },
             { v: "60", l: "FPS target", c: "yellow" as const },
             { v: "∞", l: "High scores", c: "green" as const },
