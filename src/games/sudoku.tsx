@@ -180,7 +180,7 @@ function generatePuzzle(diff: Difficulty): { puzzle: Grid; solution: Grid } {
 // ============================================================
 
 type CellState = {
-  value: number;          // 0 = empty
+  value: number;          // 0 = empty, 1..9 = value
   notes: number;          // bitmask 1..9
 };
 
@@ -264,7 +264,7 @@ export default function Sudoku() {
 
   const placeValue = useCallback((i: number, v: number) => {
     if (won || paused) return;
-    if (puzzle[i] !== 0) return; // given cell
+    if (puzzle[i] !== 0) return; // given cell — cannot modify
     pushHistory(cells);
     setCells((prev) => {
       const next = prev.map((c) => ({ ...c }));
@@ -273,7 +273,7 @@ export default function Sudoku() {
       } else {
         next[i] = { value: v, notes: 0 };
         if (v !== 0) {
-          // Auto-remove that note from same row/col/box
+          // Auto-remove that note from peers in same row/col/box
           const r = i / 9 | 0, c = i % 9, b = boxOf(r, c);
           const mask = ~(1 << (v - 1));
           for (let k = 0; k < 81; k++) {
@@ -305,11 +305,13 @@ export default function Sudoku() {
     });
   };
 
+  // Hint: only reveals the answer when the player explicitly presses Hint.
+  // Never shows candidates or guides automatically.
   const useHint = () => {
     if (won || paused) return;
     const i = selected;
     if (i < 0 || puzzle[i] !== 0) {
-      // Find first empty wrong/blank cell
+      // Selected cell is given or invalid — find first empty/wrong cell instead
       const target = cells.findIndex((c, k) => puzzle[k] === 0 && c.value !== solution[k]);
       if (target === -1) return;
       pushHistory(cells);
@@ -336,7 +338,8 @@ export default function Sudoku() {
     setTimeout(() => setCheckFlash(null), 1100);
   };
 
-  // Error detection (live highlight)
+  // Conflict detection: highlights duplicate values within the same row, column, or box.
+  // This shows logical errors, NOT the correct answer.
   const conflicts = useMemo(() => {
     const set = new Set<number>();
     for (let r = 0; r < 9; r++) {
@@ -370,7 +373,6 @@ export default function Sudoku() {
       const score = Math.max(50, m.base + timeBonus - hintPenalty);
       setFinalScore(score);
       setWon(true);
-      // Persist
       setBestTimes((prev) => ({
         ...prev,
         [difficulty]: prev[difficulty] === 0 ? seconds : Math.min(prev[difficulty], seconds),
@@ -445,10 +447,13 @@ export default function Sudoku() {
 
   const selRow = selected / 9 | 0;
   const selCol = selected % 9;
+  // The value currently displayed in the selected cell (0 if empty).
+  // Used ONLY to highlight existing visible occurrences of that number — never to reveal
+  // where the number should go or which empty cells are candidates.
   const selValue = cells[selected]?.value ?? 0;
   const m = DIFF_META[difficulty];
 
-  // Digit completion counts (for number-pad fade)
+  // Digit completion counts (for number-pad fade when all 9 of a digit are placed)
   const digitCounts = new Array(10).fill(0);
   for (let i = 0; i < 81; i++) if (cells[i].value) digitCounts[cells[i].value]++;
 
@@ -471,26 +476,47 @@ export default function Sudoku() {
             {cells.map((cell, i) => {
               const r = i / 9 | 0, c = i % 9;
               const given = puzzle[i] !== 0;
+
+              // ── Highlight rules ──────────────────────────────────────────
+              // 1. Currently selected cell → cyan
+              // 2. Conflict (duplicate value in row/col/box) → magenta
+              // 3. Same row or column as selected cell → dim white
+              // 4. Existing visible occurrence of the selected cell's number → yellow
+              //    • Only applies when the selected cell itself has a value (selValue > 0)
+              //    • Only highlights cells that ALREADY display that number (cell.value > 0)
+              //    • Never highlights empty cells — no solution guidance
+              // ─────────────────────────────────────────────────────────────
               const isSel = i === selected;
-              const sameRowCol = r === selRow || c === selCol;
-              const sameValue = selValue !== 0 && cell.value === selValue;
               const conflict = conflicts.has(i);
+              const sameRowCol = !isSel && (r === selRow || c === selCol);
+              // Highlight only already-filled cells that share the selected cell's value.
+              // Empty cells (value === 0) can never match since selValue is always > 0 here.
+              const sameValue = !isSel && selValue > 0 && cell.value === selValue;
+
               // thick borders between 3x3 boxes
               const bt = r % 3 === 0 ? 2 : 0;
               const bl = c % 3 === 0 ? 2 : 0;
               const bb = r === 8 ? 2 : 0;
               const br = c === 8 ? 2 : 0;
+
+              let bgClass: string;
+              if (isSel) {
+                bgClass = "bg-neon-cyan/25";
+              } else if (conflict) {
+                bgClass = "bg-neon-magenta/25";
+              } else if (sameValue) {
+                bgClass = "bg-neon-yellow/15";
+              } else if (sameRowCol) {
+                bgClass = "bg-white/[0.06]";
+              } else {
+                bgClass = "bg-background/80";
+              }
+
               return (
                 <button
                   key={i}
                   onClick={() => setSelected(i)}
-                  className={`relative grid place-items-center font-display transition-colors ${
-                    isSel ? "bg-neon-cyan/25"
-                      : conflict ? "bg-neon-magenta/25"
-                      : sameValue ? "bg-neon-yellow/15"
-                      : sameRowCol ? "bg-white/[0.06]"
-                      : "bg-background/80"
-                  }`}
+                  className={`relative grid place-items-center font-display transition-colors ${bgClass}`}
                   style={{
                     width: "clamp(28px, 9.2vw, 56px)",
                     height: "clamp(28px, 9.2vw, 56px)",
@@ -559,7 +585,8 @@ export default function Sudoku() {
           )}
         </div>
 
-        {/* Number pad */}
+        {/* Number pad — clicking a digit places it directly in the selected cell.
+            No "digit selection" mode exists, so there is no candidate highlighting. */}
         <div className="mt-4 mx-auto w-fit grid grid-cols-9 gap-1.5 sm:gap-2">
           {Array.from({ length: 9 }, (_, k) => k + 1).map((n) => {
             const done = digitCounts[n] >= 9;
