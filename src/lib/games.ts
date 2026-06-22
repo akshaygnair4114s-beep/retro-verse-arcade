@@ -26,6 +26,7 @@ export const GAMES: GameMeta[] = [
   { id: "asteroids", name: "Asteroids", tagline: "Drift and blast.", category: "Action", difficulty: "Hard", players: "1P", multiplayer: false, accent: "magenta", available: false, emoji: "☄️" },
   { id: "minesweeper", name: "Minesweeper", tagline: "One wrong click…", category: "Puzzle", difficulty: "Hard", players: "1P", multiplayer: false, accent: "purple", available: false, emoji: "💣" },
   { id: "memory", name: "Memory Match", tagline: "Food fight! Pair them up — 2 players.", category: "Multiplayer", difficulty: "Easy", players: "2P", multiplayer: true, accent: "cyan", available: true, emoji: "🍕" },
+  { id: "snakes-ladders", name: "Snakes & Ladders", tagline: "Climb up. Slide down. First to 100 wins.", category: "Multiplayer", difficulty: "Easy", players: "2–10P", multiplayer: true, accent: "green", available: true, emoji: "🎲" },
   { id: "chess", name: "Chess", tagline: "The royal game.", category: "Strategy", difficulty: "Hard", players: "2P", multiplayer: true, accent: "purple", available: false, emoji: "♟️" },
 ];
 

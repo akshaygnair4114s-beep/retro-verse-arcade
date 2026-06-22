@@ -1,0 +1,57 @@
+Add a complete Snake and Ladders game to the Retro Verse Arcade website.
+
+Requirements:
+
+* Create a classic Snake and Ladders board with 100 squares.
+* Allow players to choose any number of players before starting the game (minimum 2 players, maximum 10 players).
+* Allow players to enter custom player names.
+* Generate player tokens in different colors/styles so each player is easy to identify.
+* Include a digital dice with realistic rolling animation.
+* Players take turns rolling the dice.
+* Automatically move the player's token after each roll.
+* Apply all snake and ladder movements automatically.
+* Display whose turn it is at all times.
+* Show the dice result and player movement after every turn.
+* The first player to reach exactly square 100 wins.
+* If a dice roll would move a player beyond square 100, the player remains in place.
+* Display a winner screen when the game ends.
+
+Rules Screen:
+
+* Before the game starts, show a clear Rules and How to Play screen.
+* Include:
+
+  * Objective of the game.
+  * How dice rolls work.
+  * How ladders help players move up.
+  * How snakes move players down.
+  * Winning condition (reach square 100 exactly).
+* Allow players to close the rules screen and start the game.
+* Include a button to view the rules again during gameplay.
+
+Gameplay Features:
+
+* New Game button.
+* Restart Game button.
+* Turn indicator.
+* Game history/log showing recent moves.
+* Sound effects for dice rolls, snakes, ladders, and winning.
+* Smooth animations for token movement.
+
+Design:
+
+* Match the existing Retro Verse Arcade theme.
+* Use retro arcade colors, effects, and animations.
+* Make the board visually attractive and easy to read.
+
+Responsive Design:
+
+* Fully playable on desktop, laptop, tablet, and mobile devices.
+* Touch-friendly controls for mobile users.
+* Board should scale properly on all screen sizes.
+
+Integration:
+
+* Add Snake and Ladders to the main game library and homepage.
+* Do not modify or break existing games.
+* Use clean, production-ready code.
