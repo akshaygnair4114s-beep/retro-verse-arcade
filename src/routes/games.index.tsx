@@ -27,7 +27,7 @@ function GamesIndex() {
         <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">Arcade</div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">The full lineup</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          5 games live, 15+ on the way. Pick a cabinet and play — progress and high scores save automatically.
+          6 games live, 15+ on the way. Pick a cabinet and play — progress and high scores save automatically.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-2">

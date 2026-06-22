@@ -10,6 +10,7 @@ const PongGame = lazy(() => import("@/games/pong"));
 const Game2048 = lazy(() => import("@/games/g2048"));
 const TicTacToe = lazy(() => import("@/games/tictactoe"));
 const MemoryGame = lazy(() => import("@/games/memory"));
+const SudokuGame = lazy(() => import("@/games/sudoku"));
 
 export const Route = createFileRoute("/games/$gameId")({
   head: ({ params }) => {
@@ -95,6 +96,7 @@ function GameRoute() {
                   {game.id === "pong" && <PongGame />}
                   {game.id === "2048" && <Game2048 />}
                   {game.id === "tictactoe" && <TicTacToe />}
+                  {game.id === "sudoku" && <SudokuGame />}
                 </Suspense>
               )}
             </PlayerNameGate>
