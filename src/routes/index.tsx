@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const FEATURED = ["tetris", "snake", "pong", "2048", "tictactoe"];
+const FEATURED = ["tetris", "snake", "sudoku", "2048", "pong", "tictactoe"];
 
 function HomePage() {
   const featured = GAMES.filter((g) => FEATURED.includes(g.id));
