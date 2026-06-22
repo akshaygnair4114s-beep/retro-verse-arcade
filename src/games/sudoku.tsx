@@ -472,7 +472,7 @@ export default function Sudoku() {
               const r = i / 9 | 0, c = i % 9;
               const given = puzzle[i] !== 0;
               const isSel = i === selected;
-              const sameRowCol = r === selRow || c === selCol || boxOf(r, c) === boxOf(selRow, selCol);
+              const sameRowCol = r === selRow || c === selCol;
               const sameValue = selValue !== 0 && cell.value === selValue;
               const conflict = conflicts.has(i);
               // thick borders between 3x3 boxes
