@@ -344,8 +344,8 @@ function GameBoard({ initial, onNewGame }: { initial: Player[]; onNewGame: () =>
   const [flash, setFlash]       = useState<{ msg: string; cls: "ladder" | "snake" } | null>(null);
   const [showRules, setShowRules] = useState(false);
   const logId   = useRef(0);
-  const spinRef = useRef<ReturnType<typeof setInterval>>();
-  const stepRef = useRef<ReturnType<typeof setInterval>>();
+  const spinRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const stepRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const touts   = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => {
