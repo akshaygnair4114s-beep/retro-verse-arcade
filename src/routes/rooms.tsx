@@ -9,6 +9,7 @@ export const Route = createFileRoute("/rooms")({
 });
 
 const GAME_OPTIONS = [
+  { id: "chain-reaction", name: "Chain Reaction", players: 2 },
   { id: "tetris", name: "Tetris", players: 2 },
   { id: "snake", name: "Snake", players: 2 },
   { id: "pong", name: "Pong", players: 2 },
