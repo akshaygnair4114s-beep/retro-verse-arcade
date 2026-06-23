@@ -255,6 +255,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [hostId, setHostId] = useState<string | null>(null);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const moveHandlerRef = useRef<((m: Move) => void) | null>(null);
   const [opponentConnected, setOpponentConnected] = useState(false);
   const [startSignal, setStartSignal] = useState(0);
 
