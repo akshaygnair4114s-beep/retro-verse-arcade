@@ -351,9 +351,23 @@ function RoomsPage() {
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-2 w-full sm:w-auto">
+                      <div className="flex gap-2 w-full sm:w-auto items-center">
                         {isInRoom ? (
-                          <span className="text-xs font-mono text-neon-green">In Room</span>
+                          <>
+                            <span className="text-xs font-mono text-neon-green">In Room</span>
+                            <button
+                              onClick={() =>
+                                navigate({
+                                  to: "/games/$gameId",
+                                  params: { gameId: room.game_type },
+                                  search: { room: room.code } as never,
+                                })
+                              }
+                              className="btn-neon !py-2 !px-3 !text-[11px]"
+                            >
+                              Enter Match →
+                            </button>
+                          </>
                         ) : isFull ? (
                           <span className="text-xs font-mono text-muted-foreground">Full</span>
                         ) : (
