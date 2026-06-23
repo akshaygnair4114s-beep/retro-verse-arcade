@@ -93,6 +93,10 @@ function GameRoute() {
             <Suspense fallback={<div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading cabinet…</div>}>
               <SnakesAndLadders />
             </Suspense>
+          ) : game.id === "chain-reaction" ? (
+            <Suspense fallback={<div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading cabinet…</div>}>
+              <ChainReactionGame />
+            </Suspense>
           ) : (
             <PlayerNameGate gameName={game.name}>
               {() => (
