@@ -426,11 +426,8 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
       mode="online"
       onMove={(move) => channelRef.current?.send({ type: "broadcast", event: "move", payload: move })}
       onSubscribeMoves={(handler) => {
-        const ch = channelRef.current;
-        if (!ch) return () => {};
-        const ref = (payload: { payload: Move }) => handler(payload.payload);
-        ch.on("broadcast", { event: "move" }, ref);
-        return () => { /* channel teardown handled at unmount */ };
+        moveHandlerRef.current = handler;
+        return () => { moveHandlerRef.current = null; };
       }}
       opponentIds={participants.filter((p) => p.user_id !== user?.id).map((p) => p.user_id)}
       roomId={roomId}
