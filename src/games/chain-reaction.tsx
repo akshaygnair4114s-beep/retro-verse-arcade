@@ -303,7 +303,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
     return () => { active = false; };
   }, [roomCode, user, profile]);
 
-  // Realtime channel
+  // Realtime channel — set up exactly once per room
   useEffect(() => {
     if (!roomId || !user) return;
     const ch = supabase.channel(`chain-reaction:${roomCode}`, {
@@ -311,23 +311,33 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
     });
     channelRef.current = ch;
 
+    const refetchParticipants = async () => {
+      const { data } = await supabase
+        .from("room_participants")
+        .select("user_id, profile:profiles!room_participants_user_id_fkey(username)")
+        .eq("room_id", roomId);
+      if (!data) return;
+      const list: Participant[] = data.map((p: { user_id: string; profile: { username: string } | { username: string }[] | null }) => ({
+        user_id: p.user_id,
+        username: (Array.isArray(p.profile) ? p.profile[0]?.username : p.profile?.username) || "Player",
+      }));
+      list.sort((a, b) => (a.user_id === hostId ? -1 : b.user_id === hostId ? 1 : 0));
+      setParticipants(list);
+    };
+
     ch.on("presence", { event: "sync" }, () => {
       const state = ch.presenceState();
-      const ids = Object.keys(state);
-      setOpponentConnected(ids.length >= 2);
+      setOpponentConnected(Object.keys(state).length >= 2);
+      refetchParticipants();
     });
     ch.on("broadcast", { event: "start" }, () => setStartSignal((s) => s + 1));
     ch.on("broadcast", { event: "leave" }, () => {
       setErrorMsg("Opponent left the match.");
       setStatus("ended");
     });
-    ch.on("postgres_changes", { event: "INSERT", schema: "public", table: "room_participants", filter: `room_id=eq.${roomId}` },
-      async (payload) => {
-        const newId = (payload.new as { user_id: string }).user_id;
-        if (participants.find((p) => p.user_id === newId)) return;
-        const { data } = await supabase.from("profiles").select("username").eq("id", newId).maybeSingle();
-        setParticipants((cur) => cur.find((p) => p.user_id === newId) ? cur : [...cur, { user_id: newId, username: data?.username || "Player" }]);
-      });
+    ch.on("broadcast", { event: "move" }, (payload: { payload: Move }) => {
+      moveHandlerRef.current?.(payload.payload);
+    });
 
     ch.subscribe(async (s) => {
       if (s === "SUBSCRIBED") {
@@ -335,7 +345,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
       }
     });
     return () => { supabase.removeChannel(ch); channelRef.current = null; };
-  }, [roomId, user, roomCode, participants]);
+  }, [roomId, user, roomCode, hostId]);
 
   if (status === "loading") return <CenterStatus text="Connecting to room…" />;
   if (status === "error")   return (
