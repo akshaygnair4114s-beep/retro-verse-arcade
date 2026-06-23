@@ -1,9 +1,18 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const { user, profile, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    close();
+    navigate({ to: "/" });
+  };
 
   return (
     <header className="sticky top-0 z-50 glass border-b border-white/10">
@@ -23,10 +32,37 @@ export function SiteHeader() {
           <Link to="/games" className="text-muted-foreground hover:text-foreground transition-colors" activeProps={{ className: "text-foreground" }}>Arcade</Link>
           <a href="/#categories" className="text-muted-foreground hover:text-foreground transition-colors">Categories</a>
           <a href="/#stats" className="text-muted-foreground hover:text-foreground transition-colors">Stats</a>
+          {user && (
+            <Link to="/rooms" className="text-muted-foreground hover:text-foreground transition-colors" activeProps={{ className: "text-foreground" }}>Rooms</Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link to="/games" className="btn-neon !py-2 !px-3 !text-[11px] hidden sm:inline-flex">Play Now</Link>
+          {!loading && (
+            user ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/40 border border-white/15 hover:border-neon-cyan/50 transition-colors">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="" className="w-6 h-6 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-neon-cyan to-neon-magenta grid place-items-center text-xs font-display font-black text-background">
+                      {profile?.username?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )}
+                  <span className="font-mono text-xs text-foreground max-w-[80px] truncate">{profile?.username}</span>
+                </Link>
+                <button onClick={handleSignOut} className="btn-ghost-neon !py-2 !px-3 !text-[11px]">
+                  Log Out
+                </button>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link to="/login" className="btn-ghost-neon !py-2 !px-3 !text-[11px]">Log In</Link>
+                <Link to="/signup" className="btn-neon !py-2 !px-3 !text-[11px]">Sign Up</Link>
+              </div>
+            )
+          )}
+          <Link to="/games" className="btn-neon !py-2 !px-3 !text-[11px] sm:hidden">Play</Link>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -60,7 +96,25 @@ export function SiteHeader() {
             <li><Link to="/games" onClick={close} className="block py-3 px-2 rounded-md hover:bg-white/5">Arcade</Link></li>
             <li><a href="/#categories" onClick={close} className="block py-3 px-2 rounded-md hover:bg-white/5">Categories</a></li>
             <li><a href="/#stats" onClick={close} className="block py-3 px-2 rounded-md hover:bg-white/5">Stats</a></li>
-            <li className="pt-2"><Link to="/games" onClick={close} className="btn-neon w-full">Play Now</Link></li>
+            {user && (
+              <>
+                <li><Link to="/rooms" onClick={close} className="block py-3 px-2 rounded-md hover:bg-white/5">Game Rooms</Link></li>
+                <li><Link to="/profile" onClick={close} className="block py-3 px-2 rounded-md hover:bg-white/5">Profile</Link></li>
+              </>
+            )}
+            <li className="pt-2">
+              {!loading && user ? (
+                <div className="grid gap-2">
+                  <Link to="/games" onClick={close} className="btn-neon w-full text-center">Play Now</Link>
+                  <button onClick={handleSignOut} className="btn-ghost-neon w-full text-center">Log Out</button>
+                </div>
+              ) : (
+                <div className="grid gap-2">
+                  <Link to="/signup" onClick={close} className="btn-neon w-full text-center">Sign Up</Link>
+                  <Link to="/login" onClick={close} className="btn-ghost-neon w-full text-center">Log In</Link>
+                </div>
+              )}
+            </li>
           </ul>
         </nav>
       )}
