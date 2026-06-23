@@ -12,6 +12,7 @@ const TicTacToe = lazy(() => import("@/games/tictactoe"));
 const MemoryGame = lazy(() => import("@/games/memory"));
 const SudokuGame = lazy(() => import("@/games/sudoku"));
 const SnakesAndLadders = lazy(() => import("@/games/snakes-and-ladders"));
+const ChainReactionGame = lazy(() => import("@/games/chain-reaction"));
 
 export const Route = createFileRoute("/games/$gameId")({
   head: ({ params }) => {
