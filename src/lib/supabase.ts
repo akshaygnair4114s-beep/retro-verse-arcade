@@ -3,6 +3,7 @@ export { supabase } from "@/integrations/supabase/client";
 
 export const isSupabaseConfigured = true;
 
+
 export type Profile = {
   id: string;
   username: string;
