@@ -279,7 +279,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
 
       const { data: parts } = await supabase
         .from("room_participants")
-        .select("user_id, profile:profiles!room_participants_user_id_fkey(username)")
+        .select("user_id, profile:profiles!room_participants_user_id_profiles_fkey(username)")
         .eq("room_id", room.id);
       const list: Participant[] = (parts || []).map((p: { user_id: string; profile: { username: string } | { username: string }[] | null }) => ({
         user_id: p.user_id,
@@ -314,7 +314,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
     const refetchParticipants = async () => {
       const { data } = await supabase
         .from("room_participants")
-        .select("user_id, profile:profiles!room_participants_user_id_fkey(username)")
+        .select("user_id, profile:profiles!room_participants_user_id_profiles_fkey(username)")
         .eq("room_id", roomId);
       if (!data) return;
       const list: Participant[] = data.map((p: { user_id: string; profile: { username: string } | { username: string }[] | null }) => ({

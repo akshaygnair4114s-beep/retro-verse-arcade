@@ -56,9 +56,9 @@ function RoomsPage() {
         *,
         room_participants (
           *,
-          profile:profiles!room_participants_user_id_fkey (*)
+          profile:profiles!room_participants_user_id_profiles_fkey (*)
         ),
-        host_profile:profiles!game_rooms_host_id_fkey (*)
+        host_profile:profiles!game_rooms_host_id_profiles_fkey (*)
       `)
       .eq("status", "waiting")
       .order("created_at", { ascending: false })
