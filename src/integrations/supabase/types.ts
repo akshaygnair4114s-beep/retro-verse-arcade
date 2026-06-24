@@ -86,7 +86,15 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "game_rooms_host_id_profiles_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       match_history: {
         Row: {
@@ -123,6 +131,20 @@ export type Database = {
           score?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "match_history_opponent_id_profiles_fkey"
+            columns: ["opponent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_history_player_id_profiles_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "match_history_room_id_fkey"
             columns: ["room_id"]
@@ -223,6 +245,13 @@ export type Database = {
             columns: ["room_id"]
             isOneToOne: false
             referencedRelation: "game_rooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "room_participants_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
