@@ -6,6 +6,16 @@ import { supabase, type MatchHistory } from "@/lib/supabase";
 import { useEffect, useState as useReactState } from "react";
 
 export const Route = createFileRoute("/profile")({
+  head: () => ({
+    meta: [
+      { title: "Profile — RetroVerse Arcade" },
+      { name: "description", content: "View your RetroVerse Arcade profile, stats, achievements, and match history." },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://retroverse.arcade/profile" },
+    ],
+  }),
   component: ProfilePage,
 });
 

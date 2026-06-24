@@ -1,13 +1,36 @@
 {
-  "name": "RetroVerse Arcade",
+  "name": "RetroVerse Arcade - Play Free Retro Games Online",
   "short_name": "RetroVerse",
-  "description": "Play legendary retro games online — Tetris, Snake, Pong, 2048 and more.",
+  "description": "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, instant play.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0F",
-  "theme_color": "#0A0A0F",
+  "theme_color": "#00F5FF",
   "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["games", "entertainment"],
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Play Tetris",
+      "short_name": "Tetris",
+      "url": "/games/tetris",
+      "description": "Play Tetris online free"
+    },
+    {
+      "name": "Play Snake",
+      "short_name": "Snake",
+      "url": "/games/snake",
+      "description": "Play Snake online free"
+    },
+    {
+      "name": "All Games",
+      "short_name": "Games",
+      "url": "/games",
+      "description": "Browse all retro games"
+    }
   ]
 }

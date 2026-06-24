@@ -4,6 +4,16 @@ import { useAuth } from "@/hooks/useAuth";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/forgot-password")({
+  head: () => ({
+    meta: [
+      { title: "Reset Password — RetroVerse Arcade" },
+      { name: "description", content: "Reset your RetroVerse Arcade password. Enter your email to receive a password reset link." },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://retroverse.arcade/forgot-password" },
+    ],
+  }),
   component: ForgotPasswordPage,
 });
 

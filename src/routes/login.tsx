@@ -4,6 +4,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/login")({
+  head: () => ({
+    meta: [
+      { title: "Log In — RetroVerse Arcade" },
+      { name: "description", content: "Log in to your RetroVerse Arcade account to track high scores, achievements, and play with friends." },
+      { name: "robots", content: "noindex, follow" },
+      { property: "og:title", content: "Log In — RetroVerse Arcade" },
+      { property: "og:description", content: "Access your arcade profile and continue your gaming journey." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://retroverse.arcade/login" },
+    ],
+  }),
   component: LoginPage,
 });
 

@@ -4,6 +4,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/signup")({
+  head: () => ({
+    meta: [
+      { title: "Create Account — RetroVerse Arcade" },
+      { name: "description", content: "Join RetroVerse Arcade for free. Create an account to track high scores, earn achievements, compete in multiplayer games, and save your progress across devices." },
+      { name: "robots", content: "noindex, follow" },
+      { property: "og:title", content: "Join RetroVerse Arcade — Free Account" },
+      { property: "og:description", content: "Create your free arcade account and start playing classic retro games." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://retroverse.arcade/signup" },
+    ],
+  }),
   component: SignUpPage,
 });
 

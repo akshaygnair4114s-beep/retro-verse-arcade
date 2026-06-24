@@ -5,6 +5,16 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { supabase, type GameRoom, type Profile, type RoomParticipant } from "@/lib/supabase";
 
 export const Route = createFileRoute("/rooms")({
+  head: () => ({
+    meta: [
+      { title: "Game Rooms — RetroVerse Arcade Multiplayer" },
+      { name: "description", content: "Create and join multiplayer game rooms at RetroVerse Arcade. Play Chain Reaction, Memory Match, and more with friends online." },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://retroverse.arcade/rooms" },
+    ],
+  }),
   component: RoomsPage,
 });
 

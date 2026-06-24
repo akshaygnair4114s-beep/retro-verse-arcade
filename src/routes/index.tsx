@@ -2,14 +2,45 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { GameCard } from "@/components/game-card";
 import { GAMES, CATEGORIES } from "@/lib/games";
+import { generateSEO, generateWebsiteSchema, generateOrganizationSchema, generateItemListSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "RetroVerse Arcade — Play Legendary Retro Games Online" },
-      { name: "description", content: "Tetris, Snake, Pong, 2048 and more retro classics — playable instantly in your browser, free, no install required." },
-      { property: "og:title", content: "RetroVerse Arcade" },
-      { property: "og:description", content: "A neon-soaked browser arcade for the games that made us." },
+    meta: generateSEO({
+      title: "RetroVerse Arcade — Play Legendary Retro Games Online Free",
+      description: "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, no install, instant browser play. A neon-soaked arcade experience with 60 FPS gameplay and mobile support.",
+      keywords: [
+        "free online games",
+        "retro games",
+        "browser games",
+        "arcade games",
+        "play Tetris online",
+        "play Snake online",
+        "free Pong game",
+        "2048 online",
+        "Sudoku free",
+        "multiplayer games",
+        "no download games",
+        "instant play",
+        "browser arcade",
+        "mobile games",
+      ],
+      canonical: "/",
+      type: "website",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(generateWebsiteSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(generateOrganizationSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(generateItemListSchema(GAMES.filter((g) => g.available))),
+      },
     ],
   }),
   component: HomePage,

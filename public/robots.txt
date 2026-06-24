@@ -1,2 +1,30 @@
+# Robots.txt for RetroVerse Arcade
+# https://retroverse.arcade
+
 User-agent: *
+# Allow all pages to be indexed
 Allow: /
+
+# Disallow auth-related pages (not useful for search)
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /profile
+Disallow: /rooms
+
+# Sitemap location
+Sitemap: https://retroverse.arcade/sitemap.xml
+
+# Additional search engine directives
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
