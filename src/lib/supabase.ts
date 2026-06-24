@@ -1,4 +1,6 @@
 // Re-export the Lovable Cloud Supabase client so existing imports keep working.
+// Build marker to ensure VITE_SUPABASE_* env vars are bundled into the latest preview build.
+
 export { supabase } from "@/integrations/supabase/client";
 
 export const isSupabaseConfigured = true;
