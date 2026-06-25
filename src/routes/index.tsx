@@ -7,7 +7,7 @@ import { generateSEO, generateWebsiteSchema, generateOrganizationSchema, generat
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: generateSEO({
-      title: "RetroVerse Arcade — Play Legendary Retro Games Online Free",
+      title: "RetroVerse Arcade — Play Legendary Retro Games",
       description: "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, no install, instant browser play. A neon-soaked arcade experience with 60 FPS gameplay and mobile support.",
       keywords: [
         "free online games",
