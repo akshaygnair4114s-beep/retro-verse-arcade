@@ -8,7 +8,7 @@ import { generateSEO, generateItemListSchema, generateBreadcrumbSchema } from "@
 export const Route = createFileRoute("/games/")({
   head: () => ({
     meta: generateSEO({
-      title: "Play Free Retro Games Online — All Games",
+      title: "Games — RetroVerse Arcade",
       description: "Browse and play all free retro games at RetroVerse Arcade. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
       keywords: ["free online games", "retro games", "browser games", "arcade games", "play Tetris online", "play Snake online", "free Sudoku", "no download games", "instant play games"],
       canonical: "/games",
