@@ -8,12 +8,14 @@ export const Route = createFileRoute("/rooms")({
   head: () => ({
     meta: [
       { title: "Game Rooms — RetroVerse Arcade Multiplayer" },
-      { name: "description", content: "Create and join multiplayer game rooms at RetroVerse Arcade. Play Chain Reaction, Memory Match, and more with friends online." },
+      {
+        name: "description",
+        content:
+          "Create and join multiplayer game rooms at RetroVerse Arcade. Play Chain Reaction, Memory Match, and more with friends online.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/rooms" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/rooms" }],
   }),
   component: RoomsPage,
 });
@@ -62,14 +64,16 @@ function RoomsPage() {
     setLoading(true);
     const { data, error } = await supabase
       .from("game_rooms")
-      .select(`
+      .select(
+        `
         *,
         room_participants (
           *,
           profile:profiles!room_participants_user_id_profiles_fkey (*)
         ),
         host_profile:profiles!game_rooms_host_id_profiles_fkey (*)
-      `)
+      `,
+      )
       .eq("status", "waiting")
       .order("created_at", { ascending: false })
       .limit(20);
@@ -81,7 +85,7 @@ function RoomsPage() {
         (data || []).map((room) => ({
           ...room,
           participants: room.room_participants || [],
-        })) as RoomWithDetails[]
+        })) as RoomWithDetails[],
       );
     }
     setLoading(false);
@@ -205,8 +209,12 @@ function RoomsPage() {
         <div className="mx-auto max-w-4xl">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
-              <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Multiplayer</div>
-              <h1 className="font-display text-2xl md:text-3xl font-black neon-text-cyan">GAME ROOMS</h1>
+              <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+                Multiplayer
+              </div>
+              <h1 className="font-display text-2xl md:text-3xl font-black neon-text-cyan">
+                GAME ROOMS
+              </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Create or join a room to play with friends
               </p>
@@ -269,8 +277,12 @@ function RoomsPage() {
                               : "border-white/15 hover:border-white/30"
                           }`}
                         >
-                          <span className="font-display font-bold text-foreground">{game.name}</span>
-                          <span className="text-xs text-muted-foreground">{game.players} player(s)</span>
+                          <span className="font-display font-bold text-foreground">
+                            {game.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {game.players} player(s)
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -301,7 +313,10 @@ function RoomsPage() {
           <div className="glass rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-lg font-bold text-foreground">Available Rooms</h2>
-              <button onClick={fetchRooms} className="text-xs font-mono text-neon-cyan hover:underline">
+              <button
+                onClick={fetchRooms}
+                className="text-xs font-mono text-neon-cyan hover:underline"
+              >
                 Refresh
               </button>
             </div>
@@ -342,7 +357,11 @@ function RoomsPage() {
                                 className="w-6 h-6 rounded-full ring-2 ring-black/40 overflow-hidden"
                               >
                                 {p.profile?.avatar_url ? (
-                                  <img src={p.profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                                  <img
+                                    src={p.profile.avatar_url}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                  />
                                 ) : (
                                   <div className="w-full h-full bg-gradient-to-br from-neon-cyan to-neon-magenta grid place-items-center text-[8px] font-display font-black text-background">
                                     {p.profile?.username?.charAt(0).toUpperCase() || "?"}

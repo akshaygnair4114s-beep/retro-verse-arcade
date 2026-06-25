@@ -17,13 +17,27 @@ type Board = Cell[][];
 type Move = { r: number; c: number; turn: number; by: 0 | 1 };
 
 const PLAYER_COLORS = [
-  { hex: "#00F5FF", glow: "0 0 12px rgba(0,245,255,0.85)", name: "Cyan",    text: "text-neon-cyan",    bg: "bg-neon-cyan/20",    ring: "ring-neon-cyan" },
-  { hex: "#FF00AA", glow: "0 0 12px rgba(255,0,170,0.85)", name: "Magenta", text: "text-neon-magenta", bg: "bg-neon-magenta/20", ring: "ring-neon-magenta" },
+  {
+    hex: "#00F5FF",
+    glow: "0 0 12px rgba(0,245,255,0.85)",
+    name: "Cyan",
+    text: "text-neon-cyan",
+    bg: "bg-neon-cyan/20",
+    ring: "ring-neon-cyan",
+  },
+  {
+    hex: "#FF00AA",
+    glow: "0 0 12px rgba(255,0,170,0.85)",
+    name: "Magenta",
+    text: "text-neon-magenta",
+    bg: "bg-neon-magenta/20",
+    ring: "ring-neon-magenta",
+  },
 ] as const;
 
 function emptyBoard(): Board {
   return Array.from({ length: ROWS }, () =>
-    Array.from({ length: COLS }, () => ({ owner: -1 as const, count: 0 }))
+    Array.from({ length: COLS }, () => ({ owner: -1 as const, count: 0 })),
   );
 }
 
@@ -82,11 +96,13 @@ function applyMove(board: Board, r: number, c: number, player: 0 | 1): Board {
 
 /** Returns winning player (0 or 1) or -1 if no winner. `midCascade` skips the "both have played" check. */
 function gameWinner(b: Board, midCascade = false): 0 | 1 | -1 {
-  let c0 = 0, c1 = 0;
-  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
-    if (b[r][c].owner === 0) c0 += b[r][c].count;
-    else if (b[r][c].owner === 1) c1 += b[r][c].count;
-  }
+  let c0 = 0,
+    c1 = 0;
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++) {
+      if (b[r][c].owner === 0) c0 += b[r][c].count;
+      else if (b[r][c].owner === 1) c1 += b[r][c].count;
+    }
   if (!midCascade) {
     if (c0 + c1 < 2) return -1; // need at least one move from each
   }
@@ -98,41 +114,68 @@ function gameWinner(b: Board, midCascade = false): 0 | 1 | -1 {
 /* ── Sound ─────────────────────────────────────────────────────────────── */
 function useSound(muted: boolean) {
   const ctxRef = useRef<AudioContext | null>(null);
-  const ensure = () => {
+  const ensure = useCallback(() => {
     if (muted) return null;
     if (!ctxRef.current) {
       try {
-        ctxRef.current = new ((window as unknown as { AudioContext: typeof AudioContext; webkitAudioContext?: typeof AudioContext }).AudioContext
-          || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      } catch { return null; }
+        ctxRef.current = new (
+          (
+            window as unknown as {
+              AudioContext: typeof AudioContext;
+              webkitAudioContext?: typeof AudioContext;
+            }
+          ).AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+        )();
+      } catch {
+        return null;
+      }
     }
     return ctxRef.current;
-  };
-  return useCallback((type: "place" | "explode" | "win" | "lose") => {
-    const ctx = ensure();
-    if (!ctx) return;
-    const master = ctx.createGain();
-    master.gain.value = 0.1;
-    master.connect(ctx.destination);
-    const tone = (freq: number, t0: number, dur: number, wave: OscillatorType = "sine") => {
-      const o = ctx.createOscillator();
-      o.type = wave; o.frequency.value = freq;
-      const env = ctx.createGain();
-      env.gain.setValueAtTime(0.9, ctx.currentTime + t0);
-      env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t0 + dur);
-      o.connect(env); env.connect(master);
-      o.start(ctx.currentTime + t0); o.stop(ctx.currentTime + t0 + dur + 0.02);
-    };
-    if (type === "place")  tone(520, 0, 0.08, "triangle");
-    if (type === "explode") { tone(180, 0, 0.18, "sawtooth"); tone(360, 0.04, 0.18, "square"); }
-    if (type === "win")    [262, 392, 523, 784].forEach((f, i) => tone(f, i * 0.1, 0.22));
-    if (type === "lose")   [392, 311, 247, 196].forEach((f, i) => tone(f, i * 0.12, 0.2, "sawtooth"));
-    setTimeout(() => { /* keep ctx for reuse */ }, 1000);
   }, [muted]);
+  return useCallback(
+    (type: "place" | "explode" | "win" | "lose") => {
+      const ctx = ensure();
+      if (!ctx) return;
+      const master = ctx.createGain();
+      master.gain.value = 0.1;
+      master.connect(ctx.destination);
+      const tone = (freq: number, t0: number, dur: number, wave: OscillatorType = "sine") => {
+        const o = ctx.createOscillator();
+        o.type = wave;
+        o.frequency.value = freq;
+        const env = ctx.createGain();
+        env.gain.setValueAtTime(0.9, ctx.currentTime + t0);
+        env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t0 + dur);
+        o.connect(env);
+        env.connect(master);
+        o.start(ctx.currentTime + t0);
+        o.stop(ctx.currentTime + t0 + dur + 0.02);
+      };
+      if (type === "place") tone(520, 0, 0.08, "triangle");
+      if (type === "explode") {
+        tone(180, 0, 0.18, "sawtooth");
+        tone(360, 0.04, 0.18, "square");
+      }
+      if (type === "win") [262, 392, 523, 784].forEach((f, i) => tone(f, i * 0.1, 0.22));
+      if (type === "lose")
+        [392, 311, 247, 196].forEach((f, i) => tone(f, i * 0.12, 0.2, "sawtooth"));
+      setTimeout(() => {
+        /* keep ctx for reuse */
+      }, 1000);
+    },
+    [ensure],
+  );
 }
 
 /* ── Stats helpers (best-effort) ───────────────────────────────────────── */
-async function recordMatchResult(userId: string, roomId: string | null, opponentId: string | null, result: "win" | "loss", durationSec: number) {
+async function recordMatchResult(
+  userId: string,
+  roomId: string | null,
+  opponentId: string | null,
+  result: "win" | "loss",
+  durationSec: number,
+) {
   try {
     await supabase.from("match_history").insert({
       player_id: userId,
@@ -151,9 +194,12 @@ async function recordMatchResult(userId: string, roomId: string | null, opponent
     const games_played = (prev?.games_played ?? 0) + 1;
     const games_won = (prev?.games_won ?? 0) + (result === "win" ? 1 : 0);
     const games_lost = (prev?.games_lost ?? 0) + (result === "loss" ? 1 : 0);
-    await supabase.from("player_stats")
+    await supabase
+      .from("player_stats")
       .upsert({ user_id: userId, games_played, games_won, games_lost }, { onConflict: "user_id" });
-  } catch { /* best effort */ }
+  } catch {
+    /* best effort */
+  }
 }
 
 /* ── Top-level component ───────────────────────────────────────────────── */
@@ -171,9 +217,13 @@ function ModeMenu({ onPick }: { onPick: (m: "local" | "online") => void }) {
   return (
     <div className="aspect-video grid place-items-center p-6">
       <div className="w-full max-w-md text-center">
-        <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Choose Mode</div>
+        <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+          Choose Mode
+        </div>
         <h2 className="mt-2 font-display text-3xl font-black neon-text-cyan">CHAIN REACTION</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Place orbs. Trigger cascades. Conquer the board.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Place orbs. Trigger cascades. Conquer the board.
+        </p>
         <div className="mt-6 grid gap-3">
           <button className="btn-neon" onClick={() => onPick("local")}>
             Local 2-Player (same device)
@@ -183,7 +233,9 @@ function ModeMenu({ onPick }: { onPick: (m: "local" | "online") => void }) {
           </Link>
         </div>
         <p className="mt-4 text-[11px] font-mono text-muted-foreground">
-          For online, create or join a Chain Reaction room from <span className="text-neon-cyan">Rooms</span> and press <span className="text-neon-magenta">Enter Match</span>.
+          For online, create or join a Chain Reaction room from{" "}
+          <span className="text-neon-cyan">Rooms</span> and press{" "}
+          <span className="text-neon-magenta">Enter Match</span>.
         </p>
       </div>
     </div>
@@ -200,10 +252,15 @@ function LocalGame({ onExit }: { onExit: () => void }) {
     return (
       <div className="aspect-video grid place-items-center p-6">
         <form
-          onSubmit={(e) => { e.preventDefault(); if (names.p0.trim().length >= 2 && names.p1.trim().length >= 2) setStarted(true); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (names.p0.trim().length >= 2 && names.p1.trim().length >= 2) setStarted(true);
+          }}
           className="w-full max-w-md space-y-4 text-center"
         >
-          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Local 2-Player</div>
+          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+            Local 2-Player
+          </div>
           <h3 className="font-display text-2xl font-black neon-text-cyan">Enter Player Names</h3>
           {[0, 1].map((i) => (
             <div key={i} className="text-left">
@@ -212,7 +269,13 @@ function LocalGame({ onExit }: { onExit: () => void }) {
               </label>
               <input
                 value={i === 0 ? names.p0 : names.p1}
-                onChange={(e) => setNames((n) => i === 0 ? { ...n, p0: e.target.value.slice(0, 20) } : { ...n, p1: e.target.value.slice(0, 20) })}
+                onChange={(e) =>
+                  setNames((n) =>
+                    i === 0
+                      ? { ...n, p0: e.target.value.slice(0, 20) }
+                      : { ...n, p1: e.target.value.slice(0, 20) },
+                  )
+                }
                 maxLength={20}
                 placeholder={`PLAYER ${i + 1}`}
                 className="w-full bg-black/40 border border-white/15 rounded-lg px-4 py-3 font-mono uppercase tracking-widest focus:outline-none focus:border-neon-cyan"
@@ -220,8 +283,14 @@ function LocalGame({ onExit }: { onExit: () => void }) {
             </div>
           ))}
           <div className="flex gap-2 justify-center pt-2">
-            <button type="button" onClick={onExit} className="btn-ghost-neon">Back</button>
-            <button type="submit" className="btn-neon disabled:opacity-40" disabled={names.p0.trim().length < 2 || names.p1.trim().length < 2}>
+            <button type="button" onClick={onExit} className="btn-ghost-neon">
+              Back
+            </button>
+            <button
+              type="submit"
+              className="btn-neon disabled:opacity-40"
+              disabled={names.p0.trim().length < 2 || names.p1.trim().length < 2}
+            >
               Start Match →
             </button>
           </div>
@@ -249,7 +318,9 @@ type Participant = { user_id: string; username: string };
 function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void }) {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
-  const [status, setStatus] = useState<"loading" | "lobby" | "playing" | "ended" | "error">("loading");
+  const [status, setStatus] = useState<"loading" | "lobby" | "playing" | "ended" | "error">(
+    "loading",
+  );
   const [errorMsg, setErrorMsg] = useState("");
   const [roomId, setRoomId] = useState<string | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -270,9 +341,15 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
         .eq("code", roomCode)
         .maybeSingle();
       if (!active) return;
-      if (error || !room) { setErrorMsg("Room not found."); setStatus("error"); return; }
+      if (error || !room) {
+        setErrorMsg("Room not found.");
+        setStatus("error");
+        return;
+      }
       if (room.game_type !== "chain-reaction" && room.game_type !== "chain_reaction") {
-        setErrorMsg("This room is for a different game."); setStatus("error"); return;
+        setErrorMsg("This room is for a different game.");
+        setStatus("error");
+        return;
       }
       setRoomId(room.id);
       setHostId(room.host_id);
@@ -281,10 +358,16 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
         .from("room_participants")
         .select("user_id, profile:profiles!room_participants_user_id_profiles_fkey(username)")
         .eq("room_id", room.id);
-      const list: Participant[] = (parts || []).map((p: { user_id: string; profile: { username: string } | { username: string }[] | null }) => ({
-        user_id: p.user_id,
-        username: (Array.isArray(p.profile) ? p.profile[0]?.username : p.profile?.username) || "Player",
-      }));
+      const list: Participant[] = (parts || []).map(
+        (p: {
+          user_id: string;
+          profile: { username: string } | { username: string }[] | null;
+        }) => ({
+          user_id: p.user_id,
+          username:
+            (Array.isArray(p.profile) ? p.profile[0]?.username : p.profile?.username) || "Player",
+        }),
+      );
       // Ensure host first
       list.sort((a, b) => (a.user_id === room.host_id ? -1 : b.user_id === room.host_id ? 1 : 0));
       setParticipants(list);
@@ -292,7 +375,9 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
       // Auto-join if not in room and there's space
       if (!list.find((p) => p.user_id === user.id) && list.length < (room.max_players || 2)) {
         const { error: joinErr } = await supabase.from("room_participants").insert({
-          room_id: room.id, user_id: user.id, is_ready: true,
+          room_id: room.id,
+          user_id: user.id,
+          is_ready: true,
         });
         if (!joinErr && profile) {
           setParticipants((cur) => [...cur, { user_id: user.id, username: profile.username }]);
@@ -300,7 +385,9 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
       }
       setStatus("lobby");
     })();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [roomCode, user, profile]);
 
   // Realtime channel — set up exactly once per room
@@ -317,10 +404,16 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
         .select("user_id, profile:profiles!room_participants_user_id_profiles_fkey(username)")
         .eq("room_id", roomId);
       if (!data) return;
-      const list: Participant[] = data.map((p: { user_id: string; profile: { username: string } | { username: string }[] | null }) => ({
-        user_id: p.user_id,
-        username: (Array.isArray(p.profile) ? p.profile[0]?.username : p.profile?.username) || "Player",
-      }));
+      const list: Participant[] = data.map(
+        (p: {
+          user_id: string;
+          profile: { username: string } | { username: string }[] | null;
+        }) => ({
+          user_id: p.user_id,
+          username:
+            (Array.isArray(p.profile) ? p.profile[0]?.username : p.profile?.username) || "Player",
+        }),
+      );
       list.sort((a, b) => (a.user_id === hostId ? -1 : b.user_id === hostId ? 1 : 0));
       setParticipants(list);
     };
@@ -344,28 +437,49 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
         await ch.track({ user_id: user.id, at: Date.now() });
       }
     });
-    return () => { supabase.removeChannel(ch); channelRef.current = null; };
+    return () => {
+      supabase.removeChannel(ch);
+      channelRef.current = null;
+    };
   }, [roomId, user, roomCode, hostId]);
 
   if (status === "loading") return <CenterStatus text="Connecting to room…" />;
-  if (status === "error")   return (
-    <CenterStatus text={errorMsg} action={<button className="btn-neon mt-4" onClick={onExit}>← Back</button>} />
-  );
-  if (status === "ended")   return (
-    <CenterStatus text={errorMsg || "Match ended."} action={
-      <div className="flex gap-2 justify-center mt-4">
-        <button className="btn-ghost-neon" onClick={onExit}>Back</button>
-        <button className="btn-neon" onClick={() => navigate({ to: "/rooms" })}>Rooms</button>
-      </div>
-    } />
-  );
+  if (status === "error")
+    return (
+      <CenterStatus
+        text={errorMsg}
+        action={
+          <button className="btn-neon mt-4" onClick={onExit}>
+            ← Back
+          </button>
+        }
+      />
+    );
+  if (status === "ended")
+    return (
+      <CenterStatus
+        text={errorMsg || "Match ended."}
+        action={
+          <div className="flex gap-2 justify-center mt-4">
+            <button className="btn-ghost-neon" onClick={onExit}>
+              Back
+            </button>
+            <button className="btn-neon" onClick={() => navigate({ to: "/rooms" })}>
+              Rooms
+            </button>
+          </div>
+        }
+      />
+    );
 
   // Determine slot
-  const slot: 0 | 1 | null =
-    !user ? null
-    : participants[0]?.user_id === user.id ? 0
-    : participants[1]?.user_id === user.id ? 1
-    : null;
+  const slot: 0 | 1 | null = !user
+    ? null
+    : participants[0]?.user_id === user.id
+      ? 0
+      : participants[1]?.user_id === user.id
+        ? 1
+        : null;
   const isHost = hostId === user?.id;
   const ready = participants.length >= 2 && opponentConnected;
 
@@ -373,17 +487,24 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
     return (
       <div className="aspect-video grid place-items-center p-6">
         <div className="w-full max-w-md text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Online Match</div>
+          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+            Online Match
+          </div>
           <h3 className="mt-1 font-display text-2xl font-black neon-text-cyan">Room {roomCode}</h3>
           <div className="mt-4 space-y-2 text-left">
             {[0, 1].map((i) => {
               const p = participants[i];
               return (
-                <div key={i} className="flex items-center justify-between rounded-lg bg-black/40 border border-white/10 px-3 py-2">
+                <div
+                  key={i}
+                  className="flex items-center justify-between rounded-lg bg-black/40 border border-white/10 px-3 py-2"
+                >
                   <div className="flex items-center gap-2">
                     <span style={{ color: PLAYER_COLORS[i].hex }}>●</span>
                     <span className="font-mono text-sm">{p?.username || "Waiting…"}</span>
-                    {p?.user_id === user?.id && <span className="text-[10px] font-mono text-neon-yellow uppercase">you</span>}
+                    {p?.user_id === user?.id && (
+                      <span className="text-[10px] font-mono text-neon-yellow uppercase">you</span>
+                    )}
                   </div>
                   <span className="text-[10px] font-mono uppercase text-muted-foreground">
                     {p ? (i === 0 ? "Host" : "Challenger") : "Empty"}
@@ -396,17 +517,24 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
             {ready ? "Both players connected." : "Waiting for opponent to connect…"}
           </p>
           <div className="mt-5 flex gap-2 justify-center">
-            <button className="btn-ghost-neon" onClick={onExit}>Leave</button>
+            <button className="btn-ghost-neon" onClick={onExit}>
+              Leave
+            </button>
             {isHost ? (
               <button
                 className="btn-neon disabled:opacity-40"
                 disabled={!ready}
-                onClick={() => { channelRef.current?.send({ type: "broadcast", event: "start", payload: {} }); setStartSignal((s) => s + 1); }}
+                onClick={() => {
+                  channelRef.current?.send({ type: "broadcast", event: "start", payload: {} });
+                  setStartSignal((s) => s + 1);
+                }}
               >
                 Start Match →
               </button>
             ) : (
-              <span className="text-xs font-mono text-muted-foreground self-center">Host will start the match</span>
+              <span className="text-xs font-mono text-muted-foreground self-center">
+                Host will start the match
+              </span>
             )}
           </div>
         </div>
@@ -415,7 +543,16 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
   }
 
   if (slot === null) {
-    return <CenterStatus text="Room is full. Spectating is not supported yet." action={<button className="btn-neon mt-4" onClick={onExit}>← Back</button>} />;
+    return (
+      <CenterStatus
+        text="Room is full. Spectating is not supported yet."
+        action={
+          <button className="btn-neon mt-4" onClick={onExit}>
+            ← Back
+          </button>
+        }
+      />
+    );
   }
 
   return (
@@ -424,10 +561,14 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
       players={[participants[0]?.username || "Player 1", participants[1]?.username || "Player 2"]}
       youAre={slot}
       mode="online"
-      onMove={(move) => channelRef.current?.send({ type: "broadcast", event: "move", payload: move })}
+      onMove={(move) =>
+        channelRef.current?.send({ type: "broadcast", event: "move", payload: move })
+      }
       onSubscribeMoves={(handler) => {
         moveHandlerRef.current = handler;
-        return () => { moveHandlerRef.current = null; };
+        return () => {
+          moveHandlerRef.current = null;
+        };
       }}
       opponentIds={participants.filter((p) => p.user_id !== user?.id).map((p) => p.user_id)}
       roomId={roomId}
@@ -455,7 +596,7 @@ function CenterStatus({ text, action }: { text: string; action?: React.ReactNode
    ────────────────────────────────────────────────────────────────────────── */
 type MatchProps = {
   players: [string, string];
-  youAre: 0 | 1 | null;          // null = local hot-seat
+  youAre: 0 | 1 | null; // null = local hot-seat
   mode: "local" | "online";
   onMove: ((m: Move) => void) | null;
   onSubscribeMoves?: (handler: (m: Move) => void) => () => void;
@@ -464,7 +605,16 @@ type MatchProps = {
   onExit: () => void;
 };
 
-function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, opponentIds, roomId, onExit }: MatchProps) {
+function ChainReactionMatch({
+  players,
+  youAre,
+  mode,
+  onMove,
+  onSubscribeMoves,
+  opponentIds,
+  roomId,
+  onExit,
+}: MatchProps) {
   const { user } = useAuth();
   const [board, setBoard] = useState<Board>(emptyBoard);
   const [turn, setTurn] = useState(0); // even = player 0
@@ -482,7 +632,10 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
   // Timer
   useEffect(() => {
     if (winner !== -1) return;
-    const id = setInterval(() => setElapsed(Math.floor((Date.now() - startedAtRef.current) / 1000)), 1000);
+    const id = setInterval(
+      () => setElapsed(Math.floor((Date.now() - startedAtRef.current) / 1000)),
+      1000,
+    );
     return () => clearInterval(id);
   }, [winner]);
 
@@ -492,7 +645,7 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
     const unsub = onSubscribeMoves((m) => {
       // Only apply moves not from us
       if (m.by === youAre) return;
-      doApply(m, /*broadcast=*/false);
+      doApply(m, /*broadcast=*/ false);
     });
     return unsub;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -501,26 +654,29 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
   const isLegal = (r: number, c: number, by: 0 | 1) =>
     winner === -1 && !animating && (board[r][c].owner === -1 || board[r][c].owner === by);
 
-  const doApply = useCallback((m: Move, broadcast: boolean) => {
-    setBoard((prev) => {
-      // Reject out-of-order moves
-      if (m.by !== (history.length % 2 === 0 ? 0 : 1) && history.length > 0) return prev;
-      const cell = prev[m.r]?.[m.c];
-      if (!cell || (cell.owner !== -1 && cell.owner !== m.by)) return prev;
-      const next = applyMove(prev, m.r, m.c, m.by);
-      const exploded = next[m.r][m.c].count < prev[m.r][m.c].count + 1;
-      playSound(exploded ? "explode" : "place");
-      setHistory((h) => [...h, m]);
-      setTurn((t) => t + 1);
-      const w = gameWinner(next);
-      if (w !== -1) {
-        setWinner(w);
-        playSound(w === youAre ? "win" : "lose");
-      }
-      return next;
-    });
-    if (broadcast && onMove) onMove(m);
-  }, [history.length, onMove, playSound, youAre]);
+  const doApply = useCallback(
+    (m: Move, broadcast: boolean) => {
+      setBoard((prev) => {
+        // Reject out-of-order moves
+        if (m.by !== (history.length % 2 === 0 ? 0 : 1) && history.length > 0) return prev;
+        const cell = prev[m.r]?.[m.c];
+        if (!cell || (cell.owner !== -1 && cell.owner !== m.by)) return prev;
+        const next = applyMove(prev, m.r, m.c, m.by);
+        const exploded = next[m.r][m.c].count < prev[m.r][m.c].count + 1;
+        playSound(exploded ? "explode" : "place");
+        setHistory((h) => [...h, m]);
+        setTurn((t) => t + 1);
+        const w = gameWinner(next);
+        if (w !== -1) {
+          setWinner(w);
+          playSound(w === youAre ? "win" : "lose");
+        }
+        return next;
+      });
+      if (broadcast && onMove) onMove(m);
+    },
+    [history.length, onMove, playSound, youAre],
+  );
 
   const handleClick = (r: number, c: number) => {
     if (winner !== -1 || animating) return;
@@ -528,7 +684,7 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
     if (!isLegal(r, c, current)) return;
     setAnimating(true);
     const m: Move = { r, c, turn, by: current };
-    doApply(m, /*broadcast=*/true);
+    doApply(m, /*broadcast=*/ true);
     // brief lockout to let cascade settle visually
     setTimeout(() => setAnimating(false), 220);
   };
@@ -555,9 +711,7 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
     recordedRef.current = false;
   };
 
-  const turnLabel = winner !== -1
-    ? `${players[winner]} wins!`
-    : `${players[current]}'s turn`;
+  const turnLabel = winner !== -1 ? `${players[winner]} wins!` : `${players[current]}'s turn`;
 
   const turnColor = winner !== -1 ? PLAYER_COLORS[winner].hex : PLAYER_COLORS[current].hex;
 
@@ -567,34 +721,59 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 sm:gap-5 flex-wrap">
           {[0, 1].map((i) => (
-            <div key={i} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${current === i && winner === -1 ? `${PLAYER_COLORS[i].bg} border-white/20` : "border-white/10 bg-black/30"}`}>
-              <span className="w-3 h-3 rounded-full" style={{ background: PLAYER_COLORS[i].hex, boxShadow: PLAYER_COLORS[i].glow }} />
+            <div
+              key={i}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${current === i && winner === -1 ? `${PLAYER_COLORS[i].bg} border-white/20` : "border-white/10 bg-black/30"}`}
+            >
+              <span
+                className="w-3 h-3 rounded-full"
+                style={{ background: PLAYER_COLORS[i].hex, boxShadow: PLAYER_COLORS[i].glow }}
+              />
               <span className={`font-mono text-sm ${PLAYER_COLORS[i].text}`}>{players[i]}</span>
-              {mode === "online" && youAre === i && <span className="text-[10px] font-mono text-neon-yellow uppercase">you</span>}
+              {mode === "online" && youAre === i && (
+                <span className="text-[10px] font-mono text-neon-yellow uppercase">you</span>
+              )}
             </div>
           ))}
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="font-mono text-xs text-muted-foreground">
-            {String(Math.floor(elapsed / 60)).padStart(2, "0")}:{String(elapsed % 60).padStart(2, "0")}
+            {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
+            {String(elapsed % 60).padStart(2, "0")}
           </div>
-          <button onClick={() => setMuted((m) => !m)} className="btn-ghost-neon !py-1.5 !px-2 !text-[11px]" aria-label="Toggle sound">
+          <button
+            onClick={() => setMuted((m) => !m)}
+            className="btn-ghost-neon !py-1.5 !px-2 !text-[11px]"
+            aria-label="Toggle sound"
+          >
             {muted ? "🔇" : "🔊"}
           </button>
           {mode === "local" && (
-            <button onClick={reset} className="btn-ghost-neon !py-1.5 !px-2 !text-[11px]">Restart</button>
+            <button onClick={reset} className="btn-ghost-neon !py-1.5 !px-2 !text-[11px]">
+              Restart
+            </button>
           )}
-          <button onClick={onExit} className="btn-ghost-neon !py-1.5 !px-2 !text-[11px] !text-neon-magenta">Leave</button>
+          <button
+            onClick={onExit}
+            className="btn-ghost-neon !py-1.5 !px-2 !text-[11px] !text-neon-magenta"
+          >
+            Leave
+          </button>
         </div>
       </div>
 
       {/* Turn indicator */}
       <div className="text-center mb-3">
-        <div className="font-display font-bold text-base sm:text-lg" style={{ color: turnColor, textShadow: `0 0 8px ${turnColor}` }}>
+        <div
+          className="font-display font-bold text-base sm:text-lg"
+          style={{ color: turnColor, textShadow: `0 0 8px ${turnColor}` }}
+        >
           {turnLabel}
         </div>
         {mode === "online" && winner === -1 && youAre !== current && (
-          <div className="text-[11px] font-mono text-muted-foreground mt-0.5">Waiting for opponent…</div>
+          <div className="text-[11px] font-mono text-muted-foreground mt-0.5">
+            Waiting for opponent…
+          </div>
         )}
       </div>
 
@@ -607,9 +786,10 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
           {board.map((row, r) =>
             row.map((cell, c) => {
               const owner = cell.owner;
-              const clickable = mode === "local"
-                ? isLegal(r, c, current)
-                : (youAre === current && isLegal(r, c, current));
+              const clickable =
+                mode === "local"
+                  ? isLegal(r, c, current)
+                  : youAre === current && isLegal(r, c, current);
               const color = owner === -1 ? null : PLAYER_COLORS[owner];
               const mass = criticalMass(r, c);
               const willExplode = cell.count >= mass - 1;
@@ -630,7 +810,7 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
                   <CellOrbs count={cell.count} hex={color?.hex} pulse={willExplode} />
                 </button>
               );
-            })
+            }),
           )}
         </div>
       </div>
@@ -638,22 +818,31 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
       {/* History */}
       <div className="mt-4 grid sm:grid-cols-2 gap-3">
         <div className="glass rounded-lg p-3 max-h-40 overflow-auto">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Move history</div>
+          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+            Move history
+          </div>
           {history.length === 0 ? (
             <div className="text-xs text-muted-foreground">No moves yet.</div>
           ) : (
             <ol className="space-y-1 text-xs font-mono">
-              {history.slice(-12).reverse().map((m, idx) => (
-                <li key={history.length - idx} className="flex justify-between">
-                  <span style={{ color: PLAYER_COLORS[m.by].hex }}>{players[m.by]}</span>
-                  <span className="text-muted-foreground">→ R{m.r + 1} C{m.c + 1}</span>
-                </li>
-              ))}
+              {history
+                .slice(-12)
+                .reverse()
+                .map((m, idx) => (
+                  <li key={history.length - idx} className="flex justify-between">
+                    <span style={{ color: PLAYER_COLORS[m.by].hex }}>{players[m.by]}</span>
+                    <span className="text-muted-foreground">
+                      → R{m.r + 1} C{m.c + 1}
+                    </span>
+                  </li>
+                ))}
             </ol>
           )}
         </div>
         <div className="glass rounded-lg p-3">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Rules</div>
+          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+            Rules
+          </div>
           <ul className="text-[11px] text-muted-foreground space-y-0.5">
             <li>Tap an empty cell or one of your own to place an orb.</li>
             <li>Corner critical mass: 2 · Edge: 3 · Center: 4.</li>
@@ -666,24 +855,41 @@ function ChainReactionMatch({ players, youAre, mode, onMove, onSubscribeMoves, o
       {/* Victory overlay */}
       {winner !== -1 && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="glass rounded-2xl p-6 max-w-sm w-full text-center ring-2"
-               style={{ boxShadow: `0 0 32px ${PLAYER_COLORS[winner].hex}88` }}>
-            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Match Over</div>
-            <h3 className="mt-2 font-display text-3xl font-black" style={{ color: PLAYER_COLORS[winner].hex, textShadow: `0 0 12px ${PLAYER_COLORS[winner].hex}` }}>
+          <div
+            className="glass rounded-2xl p-6 max-w-sm w-full text-center ring-2"
+            style={{ boxShadow: `0 0 32px ${PLAYER_COLORS[winner].hex}88` }}
+          >
+            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+              Match Over
+            </div>
+            <h3
+              className="mt-2 font-display text-3xl font-black"
+              style={{
+                color: PLAYER_COLORS[winner].hex,
+                textShadow: `0 0 12px ${PLAYER_COLORS[winner].hex}`,
+              }}
+            >
               {players[winner]} wins!
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Match time: {String(Math.floor(elapsed / 60)).padStart(2, "0")}:{String(elapsed % 60).padStart(2, "0")} · Moves: {history.length}
+              Match time: {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
+              {String(elapsed % 60).padStart(2, "0")} · Moves: {history.length}
             </p>
             <div className="mt-5 flex gap-2 justify-center">
               {mode === "local" ? (
                 <>
-                  <button className="btn-neon" onClick={reset}>New Game</button>
-                  <button className="btn-ghost-neon" onClick={onExit}>Exit</button>
+                  <button className="btn-neon" onClick={reset}>
+                    New Game
+                  </button>
+                  <button className="btn-ghost-neon" onClick={onExit}>
+                    Exit
+                  </button>
                 </>
               ) : (
                 <>
-                  <button className="btn-ghost-neon" onClick={onExit}>Leave Match</button>
+                  <button className="btn-ghost-neon" onClick={onExit}>
+                    Leave Match
+                  </button>
                 </>
               )}
             </div>
@@ -700,9 +906,23 @@ function CellOrbs({ count, hex, pulse }: { count: number; hex?: string; pulse: b
   // Layout positions (relative offsets in %): support up to 4 orbs
   const positions: Array<[number, number]> = (() => {
     if (count === 1) return [[50, 50]];
-    if (count === 2) return [[35, 50], [65, 50]];
-    if (count === 3) return [[50, 30], [35, 65], [65, 65]];
-    return [[35, 35], [65, 35], [35, 65], [65, 65]];
+    if (count === 2)
+      return [
+        [35, 50],
+        [65, 50],
+      ];
+    if (count === 3)
+      return [
+        [50, 30],
+        [35, 65],
+        [65, 65],
+      ];
+    return [
+      [35, 35],
+      [65, 35],
+      [35, 65],
+      [65, 65],
+    ];
   })();
   return (
     <div className="absolute inset-0">

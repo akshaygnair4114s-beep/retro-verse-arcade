@@ -7,14 +7,19 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Log In — RetroVerse Arcade" },
-      { name: "description", content: "Log in to your RetroVerse Arcade account to track high scores, achievements, and play with friends." },
+      {
+        name: "description",
+        content:
+          "Log in to your RetroVerse Arcade account to track high scores, achievements, and play with friends.",
+      },
       { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: "Log In — RetroVerse Arcade" },
-      { property: "og:description", content: "Access your arcade profile and continue your gaming journey." },
+      {
+        property: "og:description",
+        content: "Access your arcade profile and continue your gaming journey.",
+      },
     ],
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/login" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/login" }],
   }),
   component: LoginPage,
 });
@@ -48,8 +53,12 @@ function LoginPage() {
       <main className="flex-1 grid place-items-center px-4 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
-            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">RetroVerse</div>
-            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-magenta">LOG IN</h1>
+            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">
+              RetroVerse
+            </div>
+            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-magenta">
+              LOG IN
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Welcome back, player. Ready to continue your arcade journey?
             </p>
@@ -63,7 +72,10 @@ function LoginPage() {
             )}
 
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="email"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Email
               </label>
               <input
@@ -79,7 +91,10 @@ function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="password"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Password
               </label>
               <input

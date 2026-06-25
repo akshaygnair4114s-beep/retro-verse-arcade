@@ -4,7 +4,10 @@ const KEY = "retroverse:player-name";
 const MAX_LEN = 16;
 
 export function sanitizePlayerName(raw: string): string {
-  return raw.replace(/[^a-zA-Z0-9 _-]/g, "").trim().slice(0, MAX_LEN);
+  return raw
+    .replace(/[^a-zA-Z0-9 _-]/g, "")
+    .trim()
+    .slice(0, MAX_LEN);
 }
 
 export function usePlayerName() {

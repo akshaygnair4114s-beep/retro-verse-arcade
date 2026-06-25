@@ -39,29 +39,46 @@ export default function MemoryGame() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!ok) return;
-            setP1(c1); setP2(c2); setStarted(true);
+            setP1(c1);
+            setP2(c2);
+            setStarted(true);
           }}
           className="w-full max-w-md text-center"
         >
-          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">2 Player Mode</div>
-          <h2 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">Enter both player names</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Match the food pairs. Most pairs wins.</p>
+          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+            2 Player Mode
+          </div>
+          <h2 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
+            Enter both player names
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Match the food pairs. Most pairs wins.
+          </p>
           <div className="mt-5 grid gap-3">
             <input
-              autoFocus value={d1} onChange={(e) => setD1(e.target.value.slice(0, 16))}
-              maxLength={16} placeholder="PLAYER 1" aria-label="Player 1 name"
+              autoFocus
+              value={d1}
+              onChange={(e) => setD1(e.target.value.slice(0, 16))}
+              maxLength={16}
+              placeholder="PLAYER 1"
+              aria-label="Player 1 name"
               className="w-full bg-black/40 border border-white/15 rounded-lg px-4 py-3 font-mono text-center text-lg tracking-widest uppercase text-neon-cyan placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-cyan"
             />
             <input
-              value={d2} onChange={(e) => setD2(e.target.value.slice(0, 16))}
-              maxLength={16} placeholder="PLAYER 2" aria-label="Player 2 name"
+              value={d2}
+              onChange={(e) => setD2(e.target.value.slice(0, 16))}
+              maxLength={16}
+              placeholder="PLAYER 2"
+              aria-label="Player 2 name"
               className="w-full bg-black/40 border border-white/15 rounded-lg px-4 py-3 font-mono text-center text-lg tracking-widest uppercase text-neon-magenta placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-magenta"
             />
           </div>
           <div className="mt-2 text-[10px] font-mono text-muted-foreground">
             2–16 chars each · names must differ
           </div>
-          <button type="submit" disabled={!ok} className="btn-neon mt-5 disabled:opacity-40">Start Match →</button>
+          <button type="submit" disabled={!ok} className="btn-neon mt-5 disabled:opacity-40">
+            Start Match →
+          </button>
         </form>
       </div>
     );
@@ -88,9 +105,9 @@ function MemoryBoard({ p1, p2, onReset }: { p1: string; p2: string; onReset: () 
     const cb = cards.find((c) => c.id === b)!;
     const match = ca.food === cb.food;
     const t = setTimeout(() => {
-      setCards((prev) => prev.map((c) =>
-        c.id === a || c.id === b ? { ...c, matched: match, flipped: match } : c
-      ));
+      setCards((prev) =>
+        prev.map((c) => (c.id === a || c.id === b ? { ...c, matched: match, flipped: match } : c)),
+      );
       if (match) {
         setScores((s) => {
           const ns: [number, number] = [...s] as [number, number];
@@ -140,11 +157,17 @@ function MemoryBoard({ p1, p2, onReset }: { p1: string; p2: string; onReset: () 
                 active ? `border-neon-${color} bg-white/5` : "border-white/10 bg-black/30"
               }`}
             >
-              <div className={`font-mono text-[10px] uppercase tracking-widest ${active ? `text-neon-${color}` : "text-muted-foreground"}`}>
+              <div
+                className={`font-mono text-[10px] uppercase tracking-widest ${active ? `text-neon-${color}` : "text-muted-foreground"}`}
+              >
                 Player {i + 1} {active && "· your turn"}
               </div>
               <div className="flex items-baseline justify-between mt-1">
-                <div className={`font-display text-lg truncate ${i === 0 ? "neon-text-cyan" : "neon-text-magenta"}`}>{names[i]}</div>
+                <div
+                  className={`font-display text-lg truncate ${i === 0 ? "neon-text-cyan" : "neon-text-magenta"}`}
+                >
+                  {names[i]}
+                </div>
                 <div className="font-mono text-xl">{scores[i]}</div>
               </div>
             </div>
@@ -165,14 +188,20 @@ function MemoryBoard({ p1, p2, onReset }: { p1: string; p2: string; onReset: () 
                 : "bg-gradient-to-br from-black/60 to-black/30 border-white/10 hover:border-neon-cyan/60 active:scale-95"
             } ${c.matched ? "opacity-70" : ""}`}
           >
-            {c.flipped || c.matched ? c.food : <span className="font-display text-neon-yellow/70">?</span>}
+            {c.flipped || c.matched ? (
+              c.food
+            ) : (
+              <span className="font-display text-neon-yellow/70">?</span>
+            )}
           </button>
         ))}
       </div>
 
       {done && (
         <div className="text-center mt-2 p-4 glass rounded-xl ring-1 ring-white/10">
-          <div className="font-mono text-xs uppercase tracking-widest text-neon-yellow">Game Over</div>
+          <div className="font-mono text-xs uppercase tracking-widest text-neon-yellow">
+            Game Over
+          </div>
           <div className="mt-1 font-display text-2xl neon-text-cyan">
             {winner === "Tie" ? "It's a tie!" : `${winner} wins!`}
           </div>
@@ -183,8 +212,12 @@ function MemoryBoard({ p1, p2, onReset }: { p1: string; p2: string; onReset: () 
       )}
 
       <div className="flex justify-center gap-3">
-        <button className="btn-neon" onClick={reset}>Rematch</button>
-        <button className="btn-ghost-neon" onClick={onReset}>Change names</button>
+        <button className="btn-neon" onClick={reset}>
+          Rematch
+        </button>
+        <button className="btn-ghost-neon" onClick={onReset}>
+          Change names
+        </button>
       </div>
     </div>
   );

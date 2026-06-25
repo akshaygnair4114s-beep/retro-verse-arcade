@@ -78,31 +78,67 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5",
+      },
       { name: "theme-color", content: "#0A0A0F" },
       { name: "color-scheme", content: "dark" },
       { title: "RetroVerse Arcade — Play Legendary Retro Games Online" },
-      { name: "description", content: "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, and Chain Reaction. No download, no install, instant play in browser." },
-      { name: "keywords", content: "retro games, browser games, online games, free games, arcade games, Tetris, Snake, Pong, 2048, Sudoku, multiplayer games, play online, no download, browser arcade" },
+      {
+        name: "description",
+        content:
+          "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, and Chain Reaction. No download, no install, instant play in browser.",
+      },
+      {
+        name: "keywords",
+        content:
+          "retro games, browser games, online games, free games, arcade games, Tetris, Snake, Pong, 2048, Sudoku, multiplayer games, play online, no download, browser arcade",
+      },
       { name: "author", content: "RetroVerse Arcade" },
-      { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
+      {
+        name: "robots",
+        content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      },
       { name: "googlebot", content: "index, follow" },
       { property: "og:title", content: "RetroVerse Arcade — Play Legendary Retro Games Online" },
-      { property: "og:description", content: "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku and more. No download, no install, instant play in browser. A neon-soaked arcade experience." },
+      {
+        property: "og:description",
+        content:
+          "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku and more. No download, no install, instant play in browser. A neon-soaked arcade experience.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://retroverse.arcade" },
       { property: "og:site_name", content: "RetroVerse Arcade" },
       { property: "og:locale", content: "en_US" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/10c94020-5a98-41fc-8eee-1a25c46f81d7" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/10c94020-5a98-41fc-8eee-1a25c46f81d7",
+      },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "RetroVerse Arcade - Play Legendary Retro Games Online" },
+      {
+        property: "og:image:alt",
+        content: "RetroVerse Arcade - Play Legendary Retro Games Online",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@retroversearc" },
       { name: "twitter:title", content: "RetroVerse Arcade — Play Legendary Retro Games Online" },
-      { name: "twitter:description", content: "Play classic retro games online for free. Tetris, Snake, Pong, 2048 and more. No download required. Neon-soaked arcade experience." },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/10c94020-5a98-41fc-8eee-1a25c46f81d7" },
-      { name: "twitter:image:alt", content: "RetroVerse Arcade - Play Legendary Retro Games Online" },
+      {
+        name: "twitter:description",
+        content:
+          "Play classic retro games online for free. Tetris, Snake, Pong, 2048 and more. No download required. Neon-soaked arcade experience.",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/10c94020-5a98-41fc-8eee-1a25c46f81d7",
+      },
+      {
+        name: "twitter:image:alt",
+        content: "RetroVerse Arcade - Play Legendary Retro Games Online",
+      },
       { name: "format-detection", content: "telephone=no" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -119,7 +155,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap",
+      },
       { rel: "sitemap", type: "application/xml", href: "/sitemap.xml" },
     ],
     scripts: [

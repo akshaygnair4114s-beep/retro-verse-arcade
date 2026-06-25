@@ -9,12 +9,13 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "Profile — RetroVerse Arcade" },
-      { name: "description", content: "View your RetroVerse Arcade profile, stats, achievements, and match history." },
+      {
+        name: "description",
+        content: "View your RetroVerse Arcade profile, stats, achievements, and match history.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/profile" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/profile" }],
   }),
   component: ProfilePage,
 });
@@ -78,7 +79,7 @@ function ProfilePage() {
       setHistoryLoading(false);
     }
     fetchHistory();
-  }, [user]);
+  }, [user, setHistoryLoading, setMatchHistory]);
 
   const handleSave = async () => {
     setError(null);
@@ -86,7 +87,10 @@ function ProfilePage() {
 
     const updates: { username?: string; avatar_url?: string | null } = {};
     if (username !== profile?.username) {
-      const clean = username.replace(/[^a-zA-Z0-9_-]/g, "").trim().slice(0, 20);
+      const clean = username
+        .replace(/[^a-zA-Z0-9_-]/g, "")
+        .trim()
+        .slice(0, 20);
       if (clean.length < 3) {
         setError("Username must be at least 3 characters");
         setSaving(false);
@@ -129,7 +133,9 @@ function ProfilePage() {
 
   if (!user || !profile) return null;
 
-  const winRate = stats?.games_played ? Math.round((stats.games_won / stats.games_played) * 100) : 0;
+  const winRate = stats?.games_played
+    ? Math.round((stats.games_won / stats.games_played) * 100)
+    : 0;
   const memberSince = new Date(profile.created_at).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -245,7 +251,10 @@ function ProfilePage() {
                     <button onClick={() => setEditing(true)} className="btn-ghost-neon text-sm">
                       Edit Profile
                     </button>
-                    <button onClick={handleSignOut} className="btn-ghost-neon text-sm !text-neon-magenta">
+                    <button
+                      onClick={handleSignOut}
+                      className="btn-ghost-neon text-sm !text-neon-magenta"
+                    >
                       Log Out
                     </button>
                   </>
@@ -343,8 +352,8 @@ function ProfilePage() {
                           match.result === "win"
                             ? "bg-neon-green/20 text-neon-green"
                             : match.result === "loss"
-                            ? "bg-neon-magenta/20 text-neon-magenta"
-                            : "bg-muted text-muted-foreground"
+                              ? "bg-neon-magenta/20 text-neon-magenta"
+                              : "bg-muted text-muted-foreground"
                         }`}
                       >
                         {match.result}
