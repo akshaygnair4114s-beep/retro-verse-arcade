@@ -64,7 +64,7 @@ export function generateGameSEO(game: GameMeta) {
   }
 
   return generateSEO({
-    title: `Play ${game.name} Online Free`,
+    title: `${game.name} — RetroVerse Arcade`,
     description: `${game.tagline} Play ${game.name} instantly in your browser — free, no download, no install. ${game.category} game with ${game.difficulty.toLowerCase()} difficulty. ${game.players} player${game.players.includes("2") ? "s" : ""}.`,
     keywords: gameKeywords,
     canonical: `/games/${game.id}`,

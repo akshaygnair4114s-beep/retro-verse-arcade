@@ -8,7 +8,7 @@ import { generateSEO, generateItemListSchema, generateBreadcrumbSchema } from "@
 export const Route = createFileRoute("/games/")({
   head: () => ({
     meta: generateSEO({
-      title: "Play Free Retro Games Online — All Games",
+      title: "Games — RetroVerse Arcade",
       description: "Browse and play all free retro games at RetroVerse Arcade. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
       keywords: ["free online games", "retro games", "browser games", "arcade games", "play Tetris online", "play Snake online", "free Sudoku", "no download games", "instant play games"],
       canonical: "/games",
@@ -52,7 +52,7 @@ function GamesIndex() {
         </nav>
 
         <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">Arcade</div>
-        <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">Play Free Retro Games Online</h1>
+        <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">Games</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
           Browse 9+ free retro games you can play instantly in your browser. No download, no install required.
           Tetris, Snake, Pong, 2048, Sudoku, Memory Match, Snakes & Ladders, and more. Progress and high scores save automatically.

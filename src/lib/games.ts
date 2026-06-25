@@ -18,7 +18,7 @@ export const GAMES: GameMeta[] = [
   { id: "snake", name: "Snake", tagline: "Eat. Grow. Don't crash.", category: "Arcade", difficulty: "Easy", players: "1P", multiplayer: false, accent: "green", available: true, emoji: "🐍" },
   { id: "pong", name: "Pong", tagline: "The original duel.", category: "Sports", difficulty: "Easy", players: "1P", multiplayer: false, accent: "magenta", available: true, emoji: "🏓" },
   { id: "2048", name: "2048", tagline: "Slide. Merge. Win.", category: "Puzzle", difficulty: "Medium", players: "1P", multiplayer: false, accent: "yellow", available: true, emoji: "🔢" },
-  { id: "tictactoe", name: "Tic-Tac-Toe", tagline: "Three in a row.", category: "Strategy", difficulty: "Easy", players: "1P", multiplayer: false, accent: "purple", available: true, emoji: "❌" },
+  { id: "tictactoe", name: "Tic-Tac-Toe", tagline: "Three in a row — solo, local 2P or online.", category: "Strategy", difficulty: "Easy", players: "1–2P", multiplayer: true, accent: "purple", available: true, emoji: "❌" },
   { id: "sudoku", name: "Sudoku", tagline: "9×9 logic. Endless puzzles.", category: "Puzzle", difficulty: "Hard", players: "1P", multiplayer: false, accent: "magenta", available: true, emoji: "🔢" },
   { id: "breakout", name: "Breakout", tagline: "Smash every brick.", category: "Arcade", difficulty: "Medium", players: "1P", multiplayer: false, accent: "cyan", available: false, emoji: "🧱" },
   { id: "space-invaders", name: "Space Invaders", tagline: "Defend the planet.", category: "Action", difficulty: "Hard", players: "1P", multiplayer: false, accent: "green", available: false, emoji: "👾" },

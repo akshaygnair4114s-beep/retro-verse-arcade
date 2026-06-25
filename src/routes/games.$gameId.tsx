@@ -113,7 +113,7 @@ function GameRoute() {
 
         <div className="grid grid-cols-[minmax(0,1fr)_auto] sm:flex sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-5 sm:mb-6">
           <div className="min-w-0">
-            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-black neon-text-cyan truncate">Play {game.name} Online Free</h1>
+            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-black neon-text-cyan truncate">{game.name}</h1>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">{game.tagline}</p>
           </div>
           <div className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground text-right shrink-0">
