@@ -91,8 +91,10 @@ function GameNotFound() {
 }
 
 function GameRoute() {
-  const game = Route.useLoaderData();
+  const game = Route.useLoaderData()!;
   const gameInfo = GAME_DESCRIPTIONS[game.id];
+
+
 
   return (
     <div className="relative z-10 min-h-screen flex flex-col">
