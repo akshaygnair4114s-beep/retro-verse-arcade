@@ -52,7 +52,7 @@ function GamesIndex() {
         </nav>
 
         <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">Arcade</div>
-        <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">Play Free Retro Games Online</h1>
+        <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">Games</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
           Browse 9+ free retro games you can play instantly in your browser. No download, no install required.
           Tetris, Snake, Pong, 2048, Sudoku, Memory Match, Snakes & Ladders, and more. Progress and high scores save automatically.
