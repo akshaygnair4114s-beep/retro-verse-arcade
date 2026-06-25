@@ -7,12 +7,14 @@ export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
       { title: "Reset Password — RetroVerse Arcade" },
-      { name: "description", content: "Reset your RetroVerse Arcade password. Enter your email to receive a password reset link." },
+      {
+        name: "description",
+        content:
+          "Reset your RetroVerse Arcade password. Enter your email to receive a password reset link.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/forgot-password" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/forgot-password" }],
   }),
   component: ForgotPasswordPage,
 });
@@ -45,8 +47,12 @@ function ForgotPasswordPage() {
       <main className="flex-1 grid place-items-center px-4 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
-            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">RetroVerse</div>
-            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">RESET PASSWORD</h1>
+            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+              RetroVerse
+            </div>
+            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
+              RESET PASSWORD
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Enter your email and we'll send you a link to reset your password.
             </p>
@@ -55,7 +61,9 @@ function ForgotPasswordPage() {
           {success ? (
             <div className="glass rounded-xl p-6 text-center">
               <div className="text-neon-green text-4xl mb-4">✓</div>
-              <h2 className="font-display text-lg font-bold text-foreground mb-2">Check Your Email</h2>
+              <h2 className="font-display text-lg font-bold text-foreground mb-2">
+                Check Your Email
+              </h2>
               <p className="text-sm text-muted-foreground">
                 We've sent a password reset link to <span className="text-neon-cyan">{email}</span>.
                 Click the link in the email to reset your password.
@@ -75,7 +83,10 @@ function ForgotPasswordPage() {
               )}
 
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                <label
+                  htmlFor="email"
+                  className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+                >
                   Email
                 </label>
                 <input

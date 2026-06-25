@@ -9,21 +9,32 @@ export const Route = createFileRoute("/games/")({
   head: () => ({
     meta: generateSEO({
       title: "Games — RetroVerse Arcade",
-      description: "Browse and play all free retro games at RetroVerse Arcade. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
-      keywords: ["free online games", "retro games", "browser games", "arcade games", "play Tetris online", "play Snake online", "free Sudoku", "no download games", "instant play games"],
+      description:
+        "Browse and play all free retro games at RetroVerse Arcade. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
+      keywords: [
+        "free online games",
+        "retro games",
+        "browser games",
+        "arcade games",
+        "play Tetris online",
+        "play Snake online",
+        "free Sudoku",
+        "no download games",
+        "instant play games",
+      ],
       canonical: "/games",
       type: "website",
     }),
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/games" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/games" }],
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(generateBreadcrumbSchema([
-          { name: "Home", url: "/" },
-          { name: "Games", url: "/games" },
-        ])),
+        children: JSON.stringify(
+          generateBreadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Games", url: "/games" },
+          ]),
+        ),
       },
       {
         type: "application/ld+json",
@@ -36,7 +47,10 @@ export const Route = createFileRoute("/games/")({
 
 function GamesIndex() {
   const [filter, setFilter] = useState<GameCategory | "All">("All");
-  const visible = filter === "All" ? GAMES : GAMES.filter((g) => g.category === filter || (filter === "Multiplayer" && g.multiplayer));
+  const visible =
+    filter === "All"
+      ? GAMES
+      : GAMES.filter((g) => g.category === filter || (filter === "Multiplayer" && g.multiplayer));
 
   return (
     <div className="relative z-10 min-h-screen flex flex-col">
@@ -45,7 +59,11 @@ function GamesIndex() {
         {/* Breadcrumb */}
         <nav className="mb-4" aria-label="Breadcrumb">
           <ol className="flex items-center text-xs text-muted-foreground">
-            <li><a href="/" className="hover:text-neon-cyan transition-colors">Home</a></li>
+            <li>
+              <a href="/" className="hover:text-neon-cyan transition-colors">
+                Home
+              </a>
+            </li>
             <li className="mx-2">/</li>
             <li className="text-foreground font-medium">Games</li>
           </ol>
@@ -54,8 +72,9 @@ function GamesIndex() {
         <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">Arcade</div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-black">Games</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          Browse 9+ free retro games you can play instantly in your browser. No download, no install required.
-          Tetris, Snake, Pong, 2048, Sudoku, Memory Match, Snakes & Ladders, and more. Progress and high scores save automatically.
+          Browse 9+ free retro games you can play instantly in your browser. No download, no install
+          required. Tetris, Snake, Pong, 2048, Sudoku, Memory Match, Snakes & Ladders, and more.
+          Progress and high scores save automatically.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-2">
@@ -75,7 +94,9 @@ function GamesIndex() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {visible.map((g) => <GameCard key={g.id} game={g} />)}
+          {visible.map((g) => (
+            <GameCard key={g.id} game={g} />
+          ))}
         </div>
       </main>
       <SiteFooter />

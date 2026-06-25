@@ -35,7 +35,11 @@ export function usePersistentState<T>(key: string, initial: T) {
     if (typeof window === "undefined") return;
     const raw = window.localStorage.getItem(fullKey);
     if (raw) {
-      try { setValue(JSON.parse(raw) as T); } catch { /* noop */ }
+      try {
+        setValue(JSON.parse(raw) as T);
+      } catch {
+        /* noop */
+      }
     }
     setLoaded(true);
   }, [fullKey]);

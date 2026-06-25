@@ -7,14 +7,19 @@ export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
       { title: "Create Account — RetroVerse Arcade" },
-      { name: "description", content: "Join RetroVerse Arcade for free. Create an account to track high scores, earn achievements, compete in multiplayer games, and save your progress across devices." },
+      {
+        name: "description",
+        content:
+          "Join RetroVerse Arcade for free. Create an account to track high scores, earn achievements, compete in multiplayer games, and save your progress across devices.",
+      },
       { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: "Join RetroVerse Arcade — Free Account" },
-      { property: "og:description", content: "Create your free arcade account and start playing classic retro games." },
+      {
+        property: "og:description",
+        content: "Create your free arcade account and start playing classic retro games.",
+      },
     ],
-    links: [
-      { rel: "canonical", href: "https://retroverse.arcade/signup" },
-    ],
+    links: [{ rel: "canonical", href: "https://retroverse.arcade/signup" }],
   }),
   component: SignUpPage,
 });
@@ -30,7 +35,10 @@ function SignUpPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const sanitizeUsername = (raw: string): string => {
-    return raw.replace(/[^a-zA-Z0-9_-]/g, "").trim().slice(0, 20);
+    return raw
+      .replace(/[^a-zA-Z0-9_-]/g, "")
+      .trim()
+      .slice(0, 20);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,8 +76,12 @@ function SignUpPage() {
       <main className="flex-1 grid place-items-center px-4 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
-            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">RetroVerse</div>
-            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">CREATE ACCOUNT</h1>
+            <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+              RetroVerse
+            </div>
+            <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
+              CREATE ACCOUNT
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Join the arcade. Track your scores, earn achievements, and prepare for multiplayer.
             </p>
@@ -83,7 +95,10 @@ function SignUpPage() {
             )}
 
             <div className="space-y-2">
-              <label htmlFor="username" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="username"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Username
               </label>
               <input
@@ -103,7 +118,10 @@ function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="email"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Email
               </label>
               <input
@@ -119,7 +137,10 @@ function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="password"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Password
               </label>
               <input
@@ -136,7 +157,10 @@ function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-xs font-mono uppercase tracking-widest text-muted-foreground"
+              >
                 Confirm Password
               </label>
               <input

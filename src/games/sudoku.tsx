@@ -10,8 +10,12 @@ type Grid = Cell[]; // length 81, row-major
 
 const ALL = (1 << 9) - 1; // 0b111111111
 
-function idx(r: number, c: number) { return r * 9 + c; }
-function boxOf(r: number, c: number) { return Math.floor(r / 3) * 3 + Math.floor(c / 3); }
+function idx(r: number, c: number) {
+  return r * 9 + c;
+}
+function boxOf(r: number, c: number) {
+  return Math.floor(r / 3) * 3 + Math.floor(c / 3);
+}
 
 function shuffle<T>(a: T[]): T[] {
   const out = [...a];
@@ -31,7 +35,9 @@ function makeMasks(grid: Grid) {
       const v = grid[idx(r, c)];
       if (v) {
         const bit = 1 << (v - 1);
-        rows[r] |= bit; cols[c] |= bit; boxes[boxOf(r, c)] |= bit;
+        rows[r] |= bit;
+        cols[c] |= bit;
+        boxes[boxOf(r, c)] |= bit;
       }
     }
   }
@@ -51,13 +57,16 @@ function countSolutions(grid: Grid, limit = 2): number {
     let bestCount = 10;
     for (let i = 0; i < 81; i++) {
       if (g[i]) continue;
-      const r = i / 9 | 0, c = i % 9;
+      const r = (i / 9) | 0,
+        c = i % 9;
       const used = rows[r] | cols[c] | boxes[boxOf(r, c)];
       const cands = ~used & ALL;
       const count = popcount(cands);
       if (count === 0) return false;
       if (count < bestCount) {
-        bestCount = count; best = i; bestCands = cands;
+        bestCount = count;
+        best = i;
+        bestCands = cands;
         if (count === 1) break;
       }
     }
@@ -65,15 +74,21 @@ function countSolutions(grid: Grid, limit = 2): number {
       found++;
       return found >= limit;
     }
-    const r = best / 9 | 0, c = best % 9, b = boxOf(r, c);
+    const r = (best / 9) | 0,
+      c = best % 9,
+      b = boxOf(r, c);
     let cands = bestCands;
     while (cands) {
       const bit = cands & -cands;
       cands ^= bit;
       g[best] = ctz(bit) + 1;
-      rows[r] |= bit; cols[c] |= bit; boxes[b] |= bit;
+      rows[r] |= bit;
+      cols[c] |= bit;
+      boxes[b] |= bit;
       if (recurse()) return true;
-      rows[r] ^= bit; cols[c] ^= bit; boxes[b] ^= bit;
+      rows[r] ^= bit;
+      cols[c] ^= bit;
+      boxes[b] ^= bit;
       g[best] = 0;
     }
     return false;
@@ -89,11 +104,25 @@ function popcount(x: number): number {
 }
 function ctz(x: number): number {
   let n = 0;
-  if (!(x & 0xFFFF)) { n += 16; x >>= 16; }
-  if (!(x & 0xFF)) { n += 8; x >>= 8; }
-  if (!(x & 0xF)) { n += 4; x >>= 4; }
-  if (!(x & 0x3)) { n += 2; x >>= 2; }
-  if (!(x & 0x1)) { n += 1; }
+  if (!(x & 0xffff)) {
+    n += 16;
+    x >>= 16;
+  }
+  if (!(x & 0xff)) {
+    n += 8;
+    x >>= 8;
+  }
+  if (!(x & 0xf)) {
+    n += 4;
+    x >>= 4;
+  }
+  if (!(x & 0x3)) {
+    n += 2;
+    x >>= 2;
+  }
+  if (!(x & 0x1)) {
+    n += 1;
+  }
   return n;
 }
 
@@ -106,16 +135,22 @@ function generateSolved(): Grid {
 
   const fill = (i: number): boolean => {
     if (i === 81) return true;
-    const r = i / 9 | 0, c = i % 9, b = boxOf(r, c);
+    const r = (i / 9) | 0,
+      c = i % 9,
+      b = boxOf(r, c);
     const used = rows[r] | cols[c] | boxes[b];
     const order = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     for (const v of order) {
       const bit = 1 << (v - 1);
       if (used & bit) continue;
       g[i] = v;
-      rows[r] |= bit; cols[c] |= bit; boxes[b] |= bit;
+      rows[r] |= bit;
+      cols[c] |= bit;
+      boxes[b] |= bit;
       if (fill(i + 1)) return true;
-      rows[r] ^= bit; cols[c] ^= bit; boxes[b] ^= bit;
+      rows[r] ^= bit;
+      cols[c] ^= bit;
+      boxes[b] ^= bit;
       g[i] = 0;
     }
     return false;
@@ -151,7 +186,7 @@ function generatePuzzle(diff: Difficulty): { puzzle: Grid; solution: Grid } {
     const savedJ = puzzle[j];
     puzzle[i] = 0;
     if (i !== j) puzzle[j] = 0;
-    const removed = (i !== j && savedJ !== 0) ? 2 : 1;
+    const removed = i !== j && savedJ !== 0 ? 2 : 1;
     if (countSolutions(puzzle, 2) !== 1) {
       puzzle[i] = savedI;
       if (i !== j) puzzle[j] = savedJ;
@@ -180,16 +215,16 @@ function generatePuzzle(diff: Difficulty): { puzzle: Grid; solution: Grid } {
 // ============================================================
 
 type CellState = {
-  value: number;          // 0 = empty, 1..9 = value
-  notes: number;          // bitmask 1..9
+  value: number; // 0 = empty, 1..9 = value
+  notes: number; // bitmask 1..9
 };
 
 type Snapshot = CellState[];
 
 const DIFF_META: Record<Difficulty, { label: string; base: number; color: string }> = {
-  easy:   { label: "EASY",   base: 1000, color: "text-neon-green" },
+  easy: { label: "EASY", base: 1000, color: "text-neon-green" },
   medium: { label: "MEDIUM", base: 2000, color: "text-neon-cyan" },
-  hard:   { label: "HARD",   base: 4000, color: "text-neon-yellow" },
+  hard: { label: "HARD", base: 4000, color: "text-neon-yellow" },
   expert: { label: "EXPERT", base: 8000, color: "text-neon-magenta" },
 };
 
@@ -198,17 +233,30 @@ function emptyCells(): Snapshot {
 }
 
 function fmtTime(s: number): string {
-  const m = Math.floor(s / 60), ss = s % 60;
+  const m = Math.floor(s / 60),
+    ss = s % 60;
   return `${m}:${ss.toString().padStart(2, "0")}`;
 }
 
 export default function Sudoku() {
-  const [bestTimes, setBestTimes] = usePersistentState<Record<Difficulty, number>>("sudoku-best-times", {
-    easy: 0, medium: 0, hard: 0, expert: 0,
-  });
-  const [highScores, setHighScores] = usePersistentState<Record<Difficulty, number>>("sudoku-high-scores", {
-    easy: 0, medium: 0, hard: 0, expert: 0,
-  });
+  const [bestTimes, setBestTimes] = usePersistentState<Record<Difficulty, number>>(
+    "sudoku-best-times",
+    {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      expert: 0,
+    },
+  );
+  const [highScores, setHighScores] = usePersistentState<Record<Difficulty, number>>(
+    "sudoku-high-scores",
+    {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      expert: 0,
+    },
+  );
 
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [started, setStarted] = useState(false);
@@ -262,31 +310,37 @@ export default function Sudoku() {
     setFuture([]);
   };
 
-  const placeValue = useCallback((i: number, v: number) => {
-    if (won || paused) return;
-    if (puzzle[i] !== 0) return; // given cell — cannot modify
-    pushHistory(cells);
-    setCells((prev) => {
-      const next = prev.map((c) => ({ ...c }));
-      if (noteMode && v !== 0) {
-        next[i] = { value: 0, notes: next[i].notes ^ (1 << (v - 1)) };
-      } else {
-        next[i] = { value: v, notes: 0 };
-        if (v !== 0) {
-          // Auto-remove that note from peers in same row/col/box
-          const r = i / 9 | 0, c = i % 9, b = boxOf(r, c);
-          const mask = ~(1 << (v - 1));
-          for (let k = 0; k < 81; k++) {
-            const rr = k / 9 | 0, cc = k % 9;
-            if (rr === r || cc === c || boxOf(rr, cc) === b) next[k].notes &= mask;
+  const placeValue = useCallback(
+    (i: number, v: number) => {
+      if (won || paused) return;
+      if (puzzle[i] !== 0) return; // given cell — cannot modify
+      pushHistory(cells);
+      setCells((prev) => {
+        const next = prev.map((c) => ({ ...c }));
+        if (noteMode && v !== 0) {
+          next[i] = { value: 0, notes: next[i].notes ^ (1 << (v - 1)) };
+        } else {
+          next[i] = { value: v, notes: 0 };
+          if (v !== 0) {
+            // Auto-remove that note from peers in same row/col/box
+            const r = (i / 9) | 0,
+              c = i % 9,
+              b = boxOf(r, c);
+            const mask = ~(1 << (v - 1));
+            for (let k = 0; k < 81; k++) {
+              const rr = (k / 9) | 0,
+                cc = k % 9;
+              if (rr === r || cc === c || boxOf(rr, cc) === b) next[k].notes &= mask;
+            }
           }
         }
-      }
-      return next;
-    });
-  }, [won, paused, puzzle, cells, noteMode]);
+        return next;
+      });
+    },
+    [won, paused, puzzle, cells, noteMode],
+  );
 
-  const undo = () => {
+  const undo = useCallback(() => {
     setHistory((h) => {
       if (!h.length) return h;
       const prev = h[h.length - 1];
@@ -294,8 +348,8 @@ export default function Sudoku() {
       setCells(prev);
       return h.slice(0, -1);
     });
-  };
-  const redo = () => {
+  }, [cells]);
+  const redo = useCallback(() => {
     setFuture((f) => {
       if (!f.length) return f;
       const next = f[0];
@@ -303,11 +357,11 @@ export default function Sudoku() {
       setCells(next);
       return f.slice(1);
     });
-  };
+  }, [cells]);
 
   // Hint: only reveals the answer when the player explicitly presses Hint.
   // Never shows candidates or guides automatically.
-  const useHint = () => {
+  const handleHint = useCallback(() => {
     if (won || paused) return;
     const i = selected;
     if (i < 0 || puzzle[i] !== 0) {
@@ -330,7 +384,7 @@ export default function Sudoku() {
       });
     }
     setHintsUsed((h) => h + 1);
-  };
+  }, [won, paused, selected, puzzle, cells, solution]);
 
   const checkSolution = () => {
     const anyWrong = cells.some((c, i) => c.value !== 0 && c.value !== solution[i]);
@@ -348,14 +402,25 @@ export default function Sudoku() {
         const v = cells[i].value;
         if (!v) continue;
         for (let k = 0; k < 9; k++) {
-          if (k !== c && cells[idx(r, k)].value === v) { set.add(i); set.add(idx(r, k)); }
-          if (k !== r && cells[idx(k, c)].value === v) { set.add(i); set.add(idx(k, c)); }
+          if (k !== c && cells[idx(r, k)].value === v) {
+            set.add(i);
+            set.add(idx(r, k));
+          }
+          if (k !== r && cells[idx(k, c)].value === v) {
+            set.add(i);
+            set.add(idx(k, c));
+          }
         }
-        const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
-        for (let rr = br; rr < br + 3; rr++) for (let cc = bc; cc < bc + 3; cc++) {
-          const j = idx(rr, cc);
-          if (j !== i && cells[j].value === v) { set.add(i); set.add(j); }
-        }
+        const br = Math.floor(r / 3) * 3,
+          bc = Math.floor(c / 3) * 3;
+        for (let rr = br; rr < br + 3; rr++)
+          for (let cc = bc; cc < bc + 3; cc++) {
+            const j = idx(rr, cc);
+            if (j !== i && cells[j].value === v) {
+              set.add(i);
+              set.add(j);
+            }
+          }
       }
     }
     return set;
@@ -388,23 +453,67 @@ export default function Sudoku() {
   useEffect(() => {
     if (!started) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "p" || e.key === "P") { setPaused((p) => !p); return; }
+      if (e.key === "p" || e.key === "P") {
+        setPaused((p) => !p);
+        return;
+      }
       if (paused || won) return;
-      if (e.key === "n" || e.key === "N") { setNoteMode((n) => !n); return; }
-      if (e.key === "h" || e.key === "H") { useHint(); return; }
-      if (e.key === "z" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
-      if (e.key === "y" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); redo(); return; }
-      const r = selected / 9 | 0, c = selected % 9;
-      if (e.key === "ArrowUp")    { e.preventDefault(); setSelected(idx(Math.max(0, r - 1), c)); return; }
-      if (e.key === "ArrowDown")  { e.preventDefault(); setSelected(idx(Math.min(8, r + 1), c)); return; }
-      if (e.key === "ArrowLeft")  { e.preventDefault(); setSelected(idx(r, Math.max(0, c - 1))); return; }
-      if (e.key === "ArrowRight") { e.preventDefault(); setSelected(idx(r, Math.min(8, c + 1))); return; }
-      if (/^[1-9]$/.test(e.key)) { placeValue(selected, parseInt(e.key, 10)); return; }
-      if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") { placeValue(selected, 0); return; }
+      if (e.key === "n" || e.key === "N") {
+        setNoteMode((n) => !n);
+        return;
+      }
+      if (e.key === "h" || e.key === "H") {
+        handleHint();
+        return;
+      }
+      if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (e.shiftKey) {
+          redo();
+        } else {
+          undo();
+        }
+        return;
+      }
+      if (e.key === "y" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        redo();
+        return;
+      }
+      const r = (selected / 9) | 0,
+        c = selected % 9;
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelected(idx(Math.max(0, r - 1), c));
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelected(idx(Math.min(8, r + 1), c));
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setSelected(idx(r, Math.max(0, c - 1)));
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setSelected(idx(r, Math.min(8, c + 1)));
+        return;
+      }
+      if (/^[1-9]$/.test(e.key)) {
+        placeValue(selected, parseInt(e.key, 10));
+        return;
+      }
+      if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") {
+        placeValue(selected, 0);
+        return;
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [started, paused, won, selected, placeValue]);
+  }, [started, paused, won, selected, placeValue, handleHint, redo, undo]);
 
   // ============================================================
   // RENDER
@@ -414,9 +523,15 @@ export default function Sudoku() {
     return (
       <div className="aspect-video min-h-[420px] grid place-items-center p-4 sm:p-6">
         <div className="w-full max-w-md text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">Sudoku</div>
-          <h2 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">Pick your difficulty</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Every puzzle is freshly generated with a unique solution.</p>
+          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
+            Sudoku
+          </div>
+          <h2 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
+            Pick your difficulty
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Every puzzle is freshly generated with a unique solution.
+          </p>
 
           <div className="mt-6 grid gap-2.5">
             {(Object.keys(DIFF_META) as Difficulty[]).map((d) => {
@@ -428,7 +543,9 @@ export default function Sudoku() {
                   disabled={generating}
                   className={`group flex items-center justify-between rounded-lg px-4 py-3 sm:py-4 glass ring-1 ring-white/10 hover:ring-neon-cyan/60 disabled:opacity-50 transition-all`}
                 >
-                  <span className={`font-display font-black tracking-widest ${m.color}`}>{m.label}</span>
+                  <span className={`font-display font-black tracking-widest ${m.color}`}>
+                    {m.label}
+                  </span>
                   <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                     Best: {bestTimes[d] ? fmtTime(bestTimes[d]) : "—"} · Hi: {highScores[d] || "—"}
                   </span>
@@ -438,14 +555,16 @@ export default function Sudoku() {
           </div>
 
           {generating && (
-            <div className="mt-5 text-xs font-mono text-neon-cyan animate-pulse">Generating puzzle…</div>
+            <div className="mt-5 text-xs font-mono text-neon-cyan animate-pulse">
+              Generating puzzle…
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  const selRow = selected / 9 | 0;
+  const selRow = (selected / 9) | 0;
   const selCol = selected % 9;
   // The value currently displayed in the selected cell (0 if empty).
   // Used ONLY to highlight existing visible occurrences of that number — never to reveal
@@ -464,7 +583,9 @@ export default function Sudoku() {
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs font-mono uppercase tracking-widest">
           <span className={`font-display font-black tracking-widest ${m.color}`}>{m.label}</span>
           <span className="text-neon-cyan tabular-nums">⏱ {fmtTime(seconds)}</span>
-          <span className="text-muted-foreground">Hints: <span className="text-neon-magenta">{hintsUsed}</span></span>
+          <span className="text-muted-foreground">
+            Hints: <span className="text-neon-magenta">{hintsUsed}</span>
+          </span>
         </div>
 
         {/* Board */}
@@ -474,7 +595,8 @@ export default function Sudoku() {
         >
           <div className="grid grid-cols-9 bg-neon-cyan/30" style={{ gap: 1 }}>
             {cells.map((cell, i) => {
-              const r = i / 9 | 0, c = i % 9;
+              const r = (i / 9) | 0,
+                c = i % 9;
               const given = puzzle[i] !== 0;
 
               // ── Highlight rules ──────────────────────────────────────────
@@ -529,11 +651,15 @@ export default function Sudoku() {
                   {cell.value !== 0 ? (
                     <span
                       className={`text-lg sm:text-2xl font-bold ${
-                        conflict ? "text-neon-magenta"
-                          : given ? "text-foreground"
-                          : "text-neon-cyan"
+                        conflict
+                          ? "text-neon-magenta"
+                          : given
+                            ? "text-foreground"
+                            : "text-neon-cyan"
                       }`}
-                      style={{ textShadow: !given ? "0 0 8px oklch(0.84 0.18 215 / 0.7)" : undefined }}
+                      style={{
+                        textShadow: !given ? "0 0 8px oklch(0.84 0.18 215 / 0.7)" : undefined,
+                      }}
                     >
                       {cell.value}
                     </span>
@@ -556,27 +682,43 @@ export default function Sudoku() {
               <div className="text-center px-5 max-w-xs">
                 {paused && !won && (
                   <>
-                    <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">PAUSED</div>
-                    <button onClick={() => setPaused(false)} className="btn-neon mt-4">Resume</button>
+                    <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">
+                      PAUSED
+                    </div>
+                    <button onClick={() => setPaused(false)} className="btn-neon mt-4">
+                      Resume
+                    </button>
                   </>
                 )}
                 {checkFlash && !won && !paused && (
-                  <div className={`font-display text-xl sm:text-2xl font-black ${checkFlash === "ok" ? "neon-text-cyan" : "neon-text-magenta"}`}>
+                  <div
+                    className={`font-display text-xl sm:text-2xl font-black ${checkFlash === "ok" ? "neon-text-cyan" : "neon-text-magenta"}`}
+                  >
                     {checkFlash === "ok" ? "Looking good ✓" : "Errors found ✗"}
                   </div>
                 )}
                 {won && (
                   <>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.4em] text-neon-yellow">Victory</div>
-                    <div className="mt-2 font-display text-3xl font-black neon-text-cyan">PUZZLE SOLVED</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.4em] text-neon-yellow">
+                      Victory
+                    </div>
+                    <div className="mt-2 font-display text-3xl font-black neon-text-cyan">
+                      PUZZLE SOLVED
+                    </div>
                     <div className="mt-3 text-sm text-muted-foreground font-mono">
-                      Time: <span className="text-neon-cyan">{fmtTime(seconds)}</span><br />
-                      Hints used: <span className="text-neon-magenta">{hintsUsed}</span><br />
+                      Time: <span className="text-neon-cyan">{fmtTime(seconds)}</span>
+                      <br />
+                      Hints used: <span className="text-neon-magenta">{hintsUsed}</span>
+                      <br />
                       Score: <span className="text-neon-yellow font-bold">{finalScore}</span>
                     </div>
                     <div className="mt-5 flex flex-wrap gap-2 justify-center">
-                      <button className="btn-neon" onClick={() => startNew(difficulty)}>New {DIFF_META[difficulty].label}</button>
-                      <button className="btn-ghost-neon" onClick={() => setStarted(false)}>Change difficulty</button>
+                      <button className="btn-neon" onClick={() => startNew(difficulty)}>
+                        New {DIFF_META[difficulty].label}
+                      </button>
+                      <button className="btn-ghost-neon" onClick={() => setStarted(false)}>
+                        Change difficulty
+                      </button>
                     </div>
                   </>
                 )}
@@ -596,8 +738,9 @@ export default function Sudoku() {
                 onClick={() => placeValue(selected, n)}
                 disabled={won || paused}
                 className={`grid place-items-center rounded-md font-display text-lg sm:text-xl font-bold transition-all ${
-                  done ? "opacity-30 bg-white/5 text-muted-foreground"
-                       : "bg-black/40 text-neon-cyan hover:bg-neon-cyan/10 ring-1 ring-neon-cyan/30 active:scale-95"
+                  done
+                    ? "opacity-30 bg-white/5 text-muted-foreground"
+                    : "bg-black/40 text-neon-cyan hover:bg-neon-cyan/10 ring-1 ring-neon-cyan/30 active:scale-95"
                 }`}
                 style={{ width: "clamp(28px, 9.2vw, 48px)", height: "clamp(36px, 11vw, 52px)" }}
               >
@@ -609,11 +752,32 @@ export default function Sudoku() {
 
         {/* Action bar */}
         <div className="mt-3 mx-auto w-fit flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-          <ActionBtn label="Erase" onClick={() => placeValue(selected, 0)} disabled={won || paused} icon="⌫" />
-          <ActionBtn label={noteMode ? "Notes ✓" : "Notes"} onClick={() => setNoteMode((n) => !n)} active={noteMode} disabled={won || paused} icon="✎" />
-          <ActionBtn label="Undo" onClick={undo} disabled={!history.length || won || paused} icon="↶" />
-          <ActionBtn label="Redo" onClick={redo} disabled={!future.length || won || paused} icon="↷" />
-          <ActionBtn label="Hint" onClick={useHint} disabled={won || paused} icon="?" />
+          <ActionBtn
+            label="Erase"
+            onClick={() => placeValue(selected, 0)}
+            disabled={won || paused}
+            icon="⌫"
+          />
+          <ActionBtn
+            label={noteMode ? "Notes ✓" : "Notes"}
+            onClick={() => setNoteMode((n) => !n)}
+            active={noteMode}
+            disabled={won || paused}
+            icon="✎"
+          />
+          <ActionBtn
+            label="Undo"
+            onClick={undo}
+            disabled={!history.length || won || paused}
+            icon="↶"
+          />
+          <ActionBtn
+            label="Redo"
+            onClick={redo}
+            disabled={!future.length || won || paused}
+            icon="↷"
+          />
+          <ActionBtn label="Hint" onClick={handleHint} disabled={won || paused} icon="?" />
         </div>
 
         <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground hidden sm:block">
@@ -624,18 +788,36 @@ export default function Sudoku() {
       <aside className="grid gap-3 grid-cols-2 md:grid-cols-1 md:w-56">
         <Stat label="Difficulty" value={m.label} cls={m.color} />
         <Stat label="Time" value={fmtTime(seconds)} cls="neon-text-cyan" />
-        <Stat label="Best Time" value={bestTimes[difficulty] ? fmtTime(bestTimes[difficulty]) : "—"} cls="text-neon-green" />
+        <Stat
+          label="Best Time"
+          value={bestTimes[difficulty] ? fmtTime(bestTimes[difficulty]) : "—"}
+          cls="text-neon-green"
+        />
         <Stat label="High Score" value={highScores[difficulty] || 0} cls="neon-text-magenta" />
-        <button onClick={() => setPaused((p) => !p)} disabled={won} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1 disabled:opacity-40">
+        <button
+          onClick={() => setPaused((p) => !p)}
+          disabled={won}
+          className="btn-ghost-neon !text-xs col-span-2 md:col-span-1 disabled:opacity-40"
+        >
           {paused ? "Resume" : "Pause"}
         </button>
-        <button onClick={checkSolution} disabled={won || paused} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1 disabled:opacity-40">
+        <button
+          onClick={checkSolution}
+          disabled={won || paused}
+          className="btn-ghost-neon !text-xs col-span-2 md:col-span-1 disabled:opacity-40"
+        >
           Check
         </button>
-        <button onClick={() => startNew(difficulty)} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1">
+        <button
+          onClick={() => startNew(difficulty)}
+          className="btn-ghost-neon !text-xs col-span-2 md:col-span-1"
+        >
           New Puzzle
         </button>
-        <button onClick={() => setStarted(false)} className="text-[11px] text-muted-foreground hover:text-foreground underline-offset-4 hover:underline col-span-2 md:col-span-1">
+        <button
+          onClick={() => setStarted(false)}
+          className="text-[11px] text-muted-foreground hover:text-foreground underline-offset-4 hover:underline col-span-2 md:col-span-1"
+        >
           Change difficulty
         </button>
       </aside>
@@ -646,15 +828,27 @@ export default function Sudoku() {
 function Stat({ label, value, cls }: { label: string; value: string | number; cls: string }) {
   return (
     <div className="glass rounded-lg p-3 ring-1 ring-white/10">
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
       <div className={`font-display text-xl font-black tabular-nums ${cls}`}>{value}</div>
     </div>
   );
 }
 
 function ActionBtn({
-  label, onClick, disabled, active, icon,
-}: { label: string; onClick: () => void; disabled?: boolean; active?: boolean; icon: string }) {
+  label,
+  onClick,
+  disabled,
+  active,
+  icon,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  icon: string;
+}) {
   return (
     <button
       onClick={onClick}

@@ -10,13 +10,31 @@ type Board = Cell[][];
 
 const SHAPES: number[][][] = [
   [], // 0
-  [[1, 1, 1, 1]],            // I
-  [[2, 2], [2, 2]],          // O
-  [[0, 3, 0], [3, 3, 3]],    // T
-  [[0, 4, 4], [4, 4, 0]],    // S
-  [[5, 5, 0], [0, 5, 5]],    // Z
-  [[6, 0, 0], [6, 6, 6]],    // J
-  [[0, 0, 7], [7, 7, 7]],    // L
+  [[1, 1, 1, 1]], // I
+  [
+    [2, 2],
+    [2, 2],
+  ], // O
+  [
+    [0, 3, 0],
+    [3, 3, 3],
+  ], // T
+  [
+    [0, 4, 4],
+    [4, 4, 0],
+  ], // S
+  [
+    [5, 5, 0],
+    [0, 5, 5],
+  ], // Z
+  [
+    [6, 0, 0],
+    [6, 6, 6],
+  ], // J
+  [
+    [0, 0, 7],
+    [7, 7, 7],
+  ], // L
 ];
 
 function emptyBoard(): Board {
@@ -27,7 +45,8 @@ function randomPiece() {
   return { shape: SHAPES[id].map((r) => [...r]), x: Math.floor(COLS / 2) - 1, y: 0 };
 }
 function rotate(shape: number[][]): number[][] {
-  const N = shape.length, M = shape[0].length;
+  const N = shape.length,
+    M = shape[0].length;
   const out: number[][] = Array.from({ length: M }, () => Array(N).fill(0));
   for (let y = 0; y < N; y++) for (let x = 0; x < M; x++) out[x][N - 1 - y] = shape[y][x];
   return out;
@@ -36,7 +55,8 @@ function collides(board: Board, shape: number[][], px: number, py: number) {
   for (let y = 0; y < shape.length; y++) {
     for (let x = 0; x < shape[y].length; x++) {
       if (!shape[y][x]) continue;
-      const nx = px + x, ny = py + y;
+      const nx = px + x,
+        ny = py + y;
       if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
       if (ny >= 0 && board[ny][nx]) return true;
     }
@@ -101,7 +121,10 @@ export default function Tetris() {
     const np = next;
     if (collides(nb, np.shape, np.x, np.y)) {
       setOver(true);
-      setScore((s) => { submit(s); return s; });
+      setScore((s) => {
+        submit(s);
+        return s;
+      });
       return;
     }
     setPiece(np);
@@ -132,21 +155,41 @@ export default function Tetris() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (over) return;
-      if (e.key === "p" || e.key === "P") { setPaused((p) => !p); return; }
+      if (e.key === "p" || e.key === "P") {
+        setPaused((p) => !p);
+        return;
+      }
       if (paused) return;
-      if (e.key === "ArrowLeft") { e.preventDefault(); tryMove(-1, 0); }
-      else if (e.key === "ArrowRight") { e.preventDefault(); tryMove(1, 0); }
-      else if (e.key === "ArrowDown") { e.preventDefault(); drop(); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); tryMove(0, 0, rotate(pieceRef.current.shape)); }
-      else if (e.key === " ") { e.preventDefault(); hardDrop(); }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        tryMove(-1, 0);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        tryMove(1, 0);
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        drop();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        tryMove(0, 0, rotate(pieceRef.current.shape));
+      } else if (e.key === " ") {
+        e.preventDefault();
+        hardDrop();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [drop, tryMove, hardDrop, paused, over]);
 
   const reset = () => {
-    setBoard(emptyBoard()); setPiece(randomPiece()); setNext(randomPiece());
-    setScore(0); setLines(0); setLevel(1); setOver(false); setPaused(false);
+    setBoard(emptyBoard());
+    setPiece(randomPiece());
+    setNext(randomPiece());
+    setScore(0);
+    setLines(0);
+    setLevel(1);
+    setOver(false);
+    setPaused(false);
   };
 
   // render board with active piece overlaid
@@ -163,7 +206,10 @@ export default function Tetris() {
           className="relative mx-auto inline-block rounded-lg p-2 bg-black/60 ring-1 ring-neon-cyan/30 touch-none select-none"
           style={{ boxShadow: "0 0 30px oklch(0.84 0.18 215 / 0.3)" }}
         >
-          <div className="grid" style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`, gap: 2 }}>
+          <div
+            className="grid"
+            style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`, gap: 2 }}
+          >
             {display.flatMap((row, y) =>
               row.map((cell, x) => (
                 <div
@@ -172,7 +218,9 @@ export default function Tetris() {
                   style={{
                     width: "clamp(12px, 7vw, 28px)",
                     background: cell ? COLORS[cell] : "rgba(255,255,255,0.04)",
-                    boxShadow: cell ? `0 0 8px ${COLORS[cell]}, inset 0 0 4px rgba(255,255,255,0.4)` : "none",
+                    boxShadow: cell
+                      ? `0 0 8px ${COLORS[cell]}, inset 0 0 4px rgba(255,255,255,0.4)`
+                      : "none",
                     borderRadius: 3,
                   }}
                 />
@@ -182,9 +230,19 @@ export default function Tetris() {
           {(over || paused) && (
             <div className="absolute inset-0 grid place-items-center bg-black/70 rounded-lg">
               <div className="text-center px-4">
-                <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">{over ? "GAME OVER" : "PAUSED"}</div>
-                {over && <button onClick={reset} className="btn-neon mt-4">Play Again</button>}
-                {!over && paused && <button onClick={() => setPaused(false)} className="btn-neon mt-4">Resume</button>}
+                <div className="font-display text-2xl sm:text-3xl font-black neon-text-magenta">
+                  {over ? "GAME OVER" : "PAUSED"}
+                </div>
+                {over && (
+                  <button onClick={reset} className="btn-neon mt-4">
+                    Play Again
+                  </button>
+                )}
+                {!over && paused && (
+                  <button onClick={() => setPaused(false)} className="btn-neon mt-4">
+                    Resume
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -192,12 +250,48 @@ export default function Tetris() {
 
         {/* Mobile touch controls */}
         <div className="mt-4 grid grid-cols-3 gap-2 max-w-xs mx-auto md:hidden">
-          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={() => tryMove(0, 0, rotate(pieceRef.current.shape))} aria-label="Rotate">⟳</button>
-          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={hardDrop} aria-label="Hard drop">⤓</button>
-          <button className="btn-ghost-neon !py-3 !px-0 !text-lg" onClick={() => setPaused((p) => !p)} aria-label="Pause">{paused ? "▶" : "⏸"}</button>
-          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => tryMove(-1, 0)} aria-label="Left">←</button>
-          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => drop()} aria-label="Soft drop">↓</button>
-          <button className="btn-ghost-neon !py-3 !px-0 !text-xl" onClick={() => tryMove(1, 0)} aria-label="Right">→</button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-lg"
+            onClick={() => tryMove(0, 0, rotate(pieceRef.current.shape))}
+            aria-label="Rotate"
+          >
+            ⟳
+          </button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-lg"
+            onClick={hardDrop}
+            aria-label="Hard drop"
+          >
+            ⤓
+          </button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-lg"
+            onClick={() => setPaused((p) => !p)}
+            aria-label="Pause"
+          >
+            {paused ? "▶" : "⏸"}
+          </button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-xl"
+            onClick={() => tryMove(-1, 0)}
+            aria-label="Left"
+          >
+            ←
+          </button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-xl"
+            onClick={() => drop()}
+            aria-label="Soft drop"
+          >
+            ↓
+          </button>
+          <button
+            className="btn-ghost-neon !py-3 !px-0 !text-xl"
+            onClick={() => tryMove(1, 0)}
+            aria-label="Right"
+          >
+            →
+          </button>
         </div>
 
         <p className="mt-3 text-center text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground hidden md:block">
@@ -211,26 +305,59 @@ export default function Tetris() {
         <Stat label="Level" value={level} accent="yellow" />
         <Stat label="Lines" value={lines} accent="green" />
         <div className="glass rounded-lg p-3 ring-1 ring-white/10 col-span-2 md:col-span-1">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Next</div>
-          <div className="grid gap-0.5 mx-auto w-fit" style={{ gridTemplateColumns: `repeat(${next.shape[0].length}, 18px)` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+            Next
+          </div>
+          <div
+            className="grid gap-0.5 mx-auto w-fit"
+            style={{ gridTemplateColumns: `repeat(${next.shape[0].length}, 18px)` }}
+          >
             {next.shape.flatMap((row, y) =>
               row.map((c, x) => (
-                <div key={`${x}-${y}`} style={{ width: 18, height: 18, background: c ? COLORS[c] : "transparent", boxShadow: c ? `0 0 6px ${COLORS[c]}` : "none", borderRadius: 2 }} />
+                <div
+                  key={`${x}-${y}`}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    background: c ? COLORS[c] : "transparent",
+                    boxShadow: c ? `0 0 6px ${COLORS[c]}` : "none",
+                    borderRadius: 2,
+                  }}
+                />
               )),
             )}
           </div>
         </div>
-        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1">New Game</button>
+        <button onClick={reset} className="btn-ghost-neon !text-xs col-span-2 md:col-span-1">
+          New Game
+        </button>
       </aside>
     </div>
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: number; accent: "cyan" | "magenta" | "yellow" | "green" }) {
-  const cls = accent === "cyan" ? "neon-text-cyan" : accent === "magenta" ? "neon-text-magenta" : accent === "yellow" ? "text-neon-yellow" : "text-neon-green";
+function Stat({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: number;
+  accent: "cyan" | "magenta" | "yellow" | "green";
+}) {
+  const cls =
+    accent === "cyan"
+      ? "neon-text-cyan"
+      : accent === "magenta"
+        ? "neon-text-magenta"
+        : accent === "yellow"
+          ? "text-neon-yellow"
+          : "text-neon-green";
   return (
     <div className="glass rounded-lg p-3 ring-1 ring-white/10">
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
       <div className={`font-display text-2xl font-black ${cls}`}>{value}</div>
     </div>
   );

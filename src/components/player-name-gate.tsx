@@ -12,7 +12,9 @@ export function PlayerNameGate({ gameName, children }: Props) {
   const [editing, setEditing] = useState(false);
 
   if (!loaded) {
-    return <div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading…</div>;
+    return (
+      <div className="aspect-video grid place-items-center text-neon-cyan font-mono">Loading…</div>
+    );
   }
 
   if (!name || editing) {
@@ -37,7 +39,8 @@ export function PlayerNameGate({ gameName, children }: Props) {
             Enter your player name
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Playing <span className="text-neon-magenta">{gameName}</span>. Your name is saved on this device.
+            Playing <span className="text-neon-magenta">{gameName}</span>. Your name is saved on
+            this device.
           </p>
           <input
             autoFocus
@@ -56,7 +59,10 @@ export function PlayerNameGate({ gameName, children }: Props) {
               <button
                 type="button"
                 className="btn-ghost-neon"
-                onClick={() => { setEditing(false); setDraft(""); }}
+                onClick={() => {
+                  setEditing(false);
+                  setDraft("");
+                }}
               >
                 Cancel
               </button>
@@ -74,12 +80,14 @@ export function PlayerNameGate({ gameName, children }: Props) {
     <div>
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Player:{" "}
-          <span className="text-neon-cyan tracking-[0.2em]">{name}</span>
+          Player: <span className="text-neon-cyan tracking-[0.2em]">{name}</span>
         </div>
         <button
           type="button"
-          onClick={() => { setDraft(name); setEditing(true); }}
+          onClick={() => {
+            setDraft(name);
+            setEditing(true);
+          }}
           className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-neon-magenta"
         >
           Change name
