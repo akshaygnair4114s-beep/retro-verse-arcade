@@ -107,7 +107,7 @@ function GameNotFound() {
 }
 
 function GameRoute() {
-  const game = Route.useLoaderData()!;
+  const game = Route.useLoaderData() as NonNullable<ReturnType<typeof getGame>>;
   const gameInfo = GAME_DESCRIPTIONS[game.id];
 
   return (
