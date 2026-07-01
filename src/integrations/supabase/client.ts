@@ -42,9 +42,8 @@ function createSupabaseClient() {
       ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
       ...(!SUPABASE_PUBLISHABLE_KEY ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    console.warn(`[Supabase] Missing environment variable(s): ${missing.join(", ")}. Auth and data features will be disabled.`);
+    return null;
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -59,13 +58,51 @@ function createSupabaseClient() {
   });
 }
 
-let _supabase: ReturnType<typeof createSupabaseClient> | undefined;
+type SupabaseClient = NonNullable<ReturnType<typeof createSupabaseClient>>;
+
+let _supabase: SupabaseClient | null | undefined;
+
+function getClient(): SupabaseClient {
+  if (_supabase === undefined) _supabase = createSupabaseClient();
+  if (!_supabase) {
+    // Return a no-op proxy so callers don't crash when Supabase is not configured
+    return new Proxy({} as SupabaseClient, {
+      get(_, prop) {
+        if (prop === "auth") {
+          return new Proxy({} as SupabaseClient["auth"], {
+            get(__, authProp) {
+              if (authProp === "getSession") return async () => ({ data: { session: null }, error: null });
+              if (authProp === "onAuthStateChange") return (_evt: unknown, _cb: unknown) => ({ data: { subscription: { unsubscribe: () => {} } } });
+              if (authProp === "signUp") return async () => ({ data: { user: null, session: null }, error: { message: "Supabase not configured" } });
+              if (authProp === "signInWithPassword") return async () => ({ data: { user: null, session: null }, error: { message: "Supabase not configured" } });
+              if (authProp === "signOut") return async () => ({});
+              if (authProp === "resetPasswordForEmail") return async () => ({ error: { message: "Supabase not configured" } });
+              return async () => ({ data: null, error: { message: "Supabase not configured" } });
+            },
+          });
+        }
+        // For .from(), .channel(), etc. — return chainable no-ops
+        return () => new Proxy({} as never, {
+          get(__, p) {
+            if (p === "then") return undefined; // not a Promise
+            return () => new Proxy({} as never, {
+              get(___, p2) {
+                if (p2 === "then") return undefined;
+                return () => Promise.resolve({ data: null, error: null });
+              },
+            });
+          },
+        });
+      },
+    });
+  }
+  return _supabase;
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
-export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
+export const supabase = new Proxy({} as SupabaseClient, {
   get(_, prop, receiver) {
-    if (!_supabase) _supabase = createSupabaseClient();
-    return Reflect.get(_supabase, prop, receiver);
+    return Reflect.get(getClient(), prop, receiver);
   },
 });
