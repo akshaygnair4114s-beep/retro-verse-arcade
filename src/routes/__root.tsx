@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "theme-color", content: "#0A0A0F" },
       { name: "color-scheme", content: "dark" },
-      { title: "RetroVerse Arcade — Play Legendary Retro Games Online" },
+      { title: "ArcadiaX — Play Legendary Retro Games Online" },
       {
         name: "description",
         content:
@@ -95,21 +95,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "retro games, browser games, online games, free games, arcade games, Tetris, Snake, Pong, 2048, Sudoku, multiplayer games, play online, no download, browser arcade",
       },
-      { name: "author", content: "RetroVerse Arcade" },
+      { name: "author", content: "ArcadiaX" },
       {
         name: "robots",
         content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
       },
       { name: "googlebot", content: "index, follow" },
-      { property: "og:title", content: "RetroVerse Arcade — Play Legendary Retro Games Online" },
+      { property: "og:title", content: "ArcadiaX — Play Legendary Retro Games Online" },
       {
         property: "og:description",
         content:
           "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku and more. No download, no install, instant play in browser. A neon-soaked arcade experience.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://retroverse.arcade" },
-      { property: "og:site_name", content: "RetroVerse Arcade" },
+      { property: "og:url", content: "https://arcadiax.lovable.app" },
+      { property: "og:site_name", content: "ArcadiaX" },
       { property: "og:locale", content: "en_US" },
       {
         property: "og:image",
@@ -120,11 +120,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:height", content: "630" },
       {
         property: "og:image:alt",
-        content: "RetroVerse Arcade - Play Legendary Retro Games Online",
+        content: "ArcadiaX - Play Legendary Retro Games Online",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@retroversearc" },
-      { name: "twitter:title", content: "RetroVerse Arcade — Play Legendary Retro Games Online" },
+      { name: "twitter:site", content: "@arcadiax" },
+      { name: "twitter:title", content: "ArcadiaX — Play Legendary Retro Games Online" },
       {
         name: "twitter:description",
         content:
@@ -137,21 +137,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         name: "twitter:image:alt",
-        content: "RetroVerse Arcade - Play Legendary Retro Games Online",
+        content: "ArcadiaX - Play Legendary Retro Games Online",
       },
       { name: "format-detection", content: "telephone=no" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "RetroVerse" },
-      { name: "application-name", content: "RetroVerse Arcade" },
+      { name: "apple-mobile-web-app-title", content: "ArcadiaX" },
+      { name: "application-name", content: "ArcadiaX" },
       { name: "msapplication-TileColor", content: "#0A0A0F" },
       { name: "msapplication-config", content: "/browserconfig.xml" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "canonical", href: "https://retroverse.arcade" },
+      { rel: "canonical", href: "https://arcadiax.lovable.app" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },

@@ -1,6 +1,6 @@
 {
-  "name": "RetroVerse Arcade - Play Free Retro Games Online",
-  "short_name": "RetroVerse",
+  "name": "ArcadiaX - Play Free Retro Games Online",
+  "short_name": "ArcadiaX",
   "description": "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, instant play.",
   "start_url": "/",
   "display": "standalone",

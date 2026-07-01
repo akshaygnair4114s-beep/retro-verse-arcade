@@ -23,7 +23,7 @@ export function SiteHeader() {
           </div>
           <div className="leading-tight min-w-0">
             <div className="font-display text-base sm:text-lg font-black tracking-widest neon-text-cyan truncate">
-              RETROVERSE
+              ARCADIAX
             </div>
             <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-[0.3em]">
               arcade
@@ -234,7 +234,7 @@ export function SiteFooter() {
     <footer className="relative z-10 mt-16 sm:mt-24 border-t border-white/10 glass">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 grid gap-8 md:grid-cols-3">
         <div>
-          <div className="font-display text-xl font-black neon-text-cyan">RETROVERSE</div>
+          <div className="font-display text-xl font-black neon-text-cyan">ARCADIAX</div>
           <p className="mt-2 text-sm text-muted-foreground max-w-xs">
             A neon-soaked arcade for the games that made us. Built for the browser, tuned for 60fps.
           </p>
@@ -289,7 +289,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-white/5 py-4 px-4 text-center text-xs text-muted-foreground font-mono">
-        © {new Date().getFullYear()} RetroVerse Arcade — INSERT COIN
+        © {new Date().getFullYear()} ArcadiaX — INSERT COIN
       </div>
     </footer>
   );

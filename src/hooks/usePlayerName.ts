@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const KEY = "retroverse:player-name";
+const KEY = "arcadiax:player-name";
 const MAX_LEN = 16;
 
 export function sanitizePlayerName(raw: string): string {
