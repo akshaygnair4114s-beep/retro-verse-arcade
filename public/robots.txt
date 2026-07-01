@@ -1,5 +1,5 @@
-# Robots.txt for RetroVerse Arcade
-# https://retroverse.arcade
+# Robots.txt for ArcadiaX
+# https://arcadiax.lovable.app
 
 User-agent: *
 # Allow all pages to be indexed
@@ -14,7 +14,7 @@ Disallow: /profile
 Disallow: /rooms
 
 # Sitemap location
-Sitemap: https://retroverse.arcade/sitemap.xml
+Sitemap: https://arcadiax.lovable.app/sitemap.xml
 
 # Additional search engine directives
 User-agent: Googlebot

@@ -8,9 +8,9 @@ import { generateSEO, generateItemListSchema, generateBreadcrumbSchema } from "@
 export const Route = createFileRoute("/games/")({
   head: () => ({
     meta: generateSEO({
-      title: "Games — RetroVerse Arcade",
+      title: "Games — ArcadiaX",
       description:
-        "Browse and play all free retro games at RetroVerse Arcade. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
+        "Browse and play all free retro games at ArcadiaX. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction and more. No download, no install, instant play.",
       keywords: [
         "free online games",
         "retro games",
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/games/")({
       canonical: "/games",
       type: "website",
     }),
-    links: [{ rel: "canonical", href: "https://retroverse.arcade/games" }],
+    links: [{ rel: "canonical", href: "https://arcadiax.lovable.app/games" }],
     scripts: [
       {
         type: "application/ld+json",

@@ -26,11 +26,11 @@ export const Route = createFileRoute("/games/$gameId")({
     if (!g) {
       return {
         meta: [
-          { title: "Game Not Found — RetroVerse Arcade" },
+          { title: "Game Not Found — ArcadiaX" },
           {
             name: "description",
             content:
-              "This game is not available yet. Browse other retro games at RetroVerse Arcade.",
+              "This game is not available yet. Browse other retro games at ArcadiaX.",
           },
           { name: "robots", content: "noindex, nofollow" },
         ],
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/games/$gameId")({
 
     return {
       meta: seoData,
-      links: [{ rel: "canonical", href: `https://retroverse.arcade/games/${g.id}` }],
+      links: [{ rel: "canonical", href: `https://arcadiax.lovable.app/games/${g.id}` }],
       scripts: [
         {
           type: "application/ld+json",
@@ -240,7 +240,7 @@ function GameRoute() {
               </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {game.name} is a classic {game.category.toLowerCase()} game you can play online for
-                free at RetroVerse Arcade.
+                free at ArcadiaX.
                 {game.multiplayer
                   ? "Challenge your friends in local multiplayer mode."
                   : "Challenge yourself and track your high scores."}

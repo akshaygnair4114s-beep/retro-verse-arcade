@@ -6,15 +6,15 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset Password — RetroVerse Arcade" },
+      { title: "Reset Password — ArcadiaX" },
       {
         name: "description",
         content:
-          "Reset your RetroVerse Arcade password. Enter your email to receive a password reset link.",
+          "Reset your ArcadiaX password. Enter your email to receive a password reset link.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [{ rel: "canonical", href: "https://retroverse.arcade/forgot-password" }],
+    links: [{ rel: "canonical", href: "https://arcadiax.lovable.app/forgot-password" }],
   }),
   component: ForgotPasswordPage,
 });
@@ -48,7 +48,7 @@ function ForgotPasswordPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
             <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
-              RetroVerse
+              ArcadiaX
             </div>
             <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
               RESET PASSWORD
@@ -97,7 +97,7 @@ function ForgotPasswordPage() {
                   required
                   disabled={submitting}
                   className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/15 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors disabled:opacity-50"
-                  placeholder="player@retroverse.arcade"
+                  placeholder="player@arcadiax.lovable.app"
                 />
               </div>
 

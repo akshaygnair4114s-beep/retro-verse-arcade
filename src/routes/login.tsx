@@ -6,20 +6,20 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Log In — RetroVerse Arcade" },
+      { title: "Log In — ArcadiaX" },
       {
         name: "description",
         content:
-          "Log in to your RetroVerse Arcade account to track high scores, achievements, and play with friends.",
+          "Log in to your ArcadiaX account to track high scores, achievements, and play with friends.",
       },
       { name: "robots", content: "noindex, follow" },
-      { property: "og:title", content: "Log In — RetroVerse Arcade" },
+      { property: "og:title", content: "Log In — ArcadiaX" },
       {
         property: "og:description",
         content: "Access your arcade profile and continue your gaming journey.",
       },
     ],
-    links: [{ rel: "canonical", href: "https://retroverse.arcade/login" }],
+    links: [{ rel: "canonical", href: "https://arcadiax.lovable.app/login" }],
   }),
   component: LoginPage,
 });
@@ -54,7 +54,7 @@ function LoginPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
             <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-cyan">
-              RetroVerse
+              ArcadiaX
             </div>
             <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-magenta">
               LOG IN
@@ -86,7 +86,7 @@ function LoginPage() {
                 required
                 disabled={submitting || loading}
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/15 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors disabled:opacity-50"
-                placeholder="player@retroverse.arcade"
+                placeholder="player@arcadiax.lovable.app"
               />
             </div>
 

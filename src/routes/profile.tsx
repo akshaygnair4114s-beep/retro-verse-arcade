@@ -8,14 +8,14 @@ import { useEffect, useState as useReactState } from "react";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "Profile — RetroVerse Arcade" },
+      { title: "Profile — ArcadiaX" },
       {
         name: "description",
-        content: "View your RetroVerse Arcade profile, stats, achievements, and match history.",
+        content: "View your ArcadiaX profile, stats, achievements, and match history.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [{ rel: "canonical", href: "https://retroverse.arcade/profile" }],
+    links: [{ rel: "canonical", href: "https://arcadiax.lovable.app/profile" }],
   }),
   component: ProfilePage,
 });

@@ -6,20 +6,20 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Create Account — RetroVerse Arcade" },
+      { title: "Create Account — ArcadiaX" },
       {
         name: "description",
         content:
-          "Join RetroVerse Arcade for free. Create an account to track high scores, earn achievements, compete in multiplayer games, and save your progress across devices.",
+          "Join ArcadiaX for free. Create an account to track high scores, earn achievements, compete in multiplayer games, and save your progress across devices.",
       },
       { name: "robots", content: "noindex, follow" },
-      { property: "og:title", content: "Join RetroVerse Arcade — Free Account" },
+      { property: "og:title", content: "Join ArcadiaX — Free Account" },
       {
         property: "og:description",
         content: "Create your free arcade account and start playing classic retro games.",
       },
     ],
-    links: [{ rel: "canonical", href: "https://retroverse.arcade/signup" }],
+    links: [{ rel: "canonical", href: "https://arcadiax.lovable.app/signup" }],
   }),
   component: SignUpPage,
 });
@@ -77,7 +77,7 @@ function SignUpPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
             <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow">
-              RetroVerse
+              ArcadiaX
             </div>
             <h1 className="mt-2 font-display text-2xl md:text-3xl font-black neon-text-cyan">
               CREATE ACCOUNT
@@ -132,7 +132,7 @@ function SignUpPage() {
                 required
                 disabled={submitting || loading}
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/15 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors disabled:opacity-50"
-                placeholder="player@retroverse.arcade"
+                placeholder="player@arcadiax.lovable.app"
               />
             </div>
 

@@ -1,7 +1,7 @@
 import type { GameMeta } from "./games";
 
-export const SITE_URL = "https://retroverse.arcade";
-export const SITE_NAME = "RetroVerse Arcade";
+export const SITE_URL = "https://arcadiax.lovable.app";
+export const SITE_NAME = "ArcadiaX";
 export const SITE_TAGLINE = "Play Legendary Retro Games Online";
 export const DEFAULT_IMAGE =
   "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&w=1200&h=630&fit=crop";
@@ -17,9 +17,9 @@ export type SEOProps = {
 };
 
 export function generateSEO(seo: SEOProps) {
-  const fullTitle = seo.title.includes("RetroVerse")
+  const fullTitle = seo.title.includes("ArcadiaX")
     ? seo.title
-    : `${seo.title} — RetroVerse Arcade`;
+    : `${seo.title} — ArcadiaX`;
   const url = seo.canonical ? `${SITE_URL}${seo.canonical}` : SITE_URL;
   const image = seo.image || DEFAULT_IMAGE;
 
@@ -72,7 +72,7 @@ export function generateGameSEO(game: GameMeta) {
   }
 
   return generateSEO({
-    title: `${game.name} — RetroVerse Arcade`,
+    title: `${game.name} — ArcadiaX`,
     description: `${game.tagline} Play ${game.name} instantly in your browser — free, no download, no install. ${game.category} game with ${game.difficulty.toLowerCase()} difficulty. ${game.players} player${game.players.includes("2") ? "s" : ""}.`,
     keywords: gameKeywords,
     canonical: `/games/${game.id}`,
@@ -143,7 +143,7 @@ export function generateGameSchema(game: GameMeta) {
     playMode: game.multiplayer ? ["SinglePlayer", "MultiPlayer"] : ["SinglePlayer"],
     gameServer: {
       "@type": "GameServer",
-      name: "RetroVerse Arcade",
+      name: "ArcadiaX",
       playersOnline: "100+",
     },
     url: `${SITE_URL}/games/${game.id}`,
@@ -167,7 +167,7 @@ export function generateItemListSchema(games: GameMeta[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "RetroVerse Arcade Games",
+    name: "ArcadiaX Games",
     numberOfItems: games.length,
     itemListElement: games.map((game, index) => ({
       "@type": "ListItem",

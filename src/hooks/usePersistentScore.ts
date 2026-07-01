@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 export function usePersistentScore(gameId: string, initial = 0) {
-  const key = `retroverse:highscore:${gameId}`;
+  const key = `arcadiax:highscore:${gameId}`;
   const [highScore, setHighScore] = useState<number>(initial);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function usePersistentScore(gameId: string, initial = 0) {
 }
 
 export function usePersistentState<T>(key: string, initial: T) {
-  const fullKey = `retroverse:state:${key}`;
+  const fullKey = `arcadiax:state:${key}`;
   const [value, setValue] = useState<T>(initial);
   const [loaded, setLoaded] = useState(false);
 
