@@ -261,7 +261,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_room_channel_participant: { Args: { topic: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
