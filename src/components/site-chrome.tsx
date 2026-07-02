@@ -17,16 +17,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 glass border-b border-white/10">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
-        <Link to="/" onClick={close} className="flex items-center gap-2 group min-w-0">
-          <div className="relative h-9 w-9 shrink-0 rounded-md bg-gradient-to-br from-neon-cyan to-neon-magenta grid place-items-center font-display font-black text-background shadow-[0_0_18px_oklch(0.84_0.18_215/0.55)]">
-            R
-          </div>
+        <Link to="/" onClick={close} className="flex items-center gap-3 group min-w-0">
+          <NovaLogo className="h-10 w-10 shrink-0" />
           <div className="leading-tight min-w-0">
-            <div className="font-display text-base sm:text-lg font-black tracking-widest neon-text-cyan truncate">
-              ARCADIAX
+            <div className="font-display text-base sm:text-lg font-black tracking-[0.18em] neon-text-cyan truncate">
+              NOVA HUB
             </div>
             <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-[0.3em]">
-              arcade
+              Play · Connect · Compete
             </div>
           </div>
         </Link>
@@ -45,30 +43,26 @@ export function SiteHeader() {
             className="text-muted-foreground hover:text-foreground transition-colors"
             activeProps={{ className: "text-foreground" }}
           >
-            Arcade
+            Games
           </Link>
-          <a
-            href="/#categories"
+          <Link
+            to="/rooms"
             className="text-muted-foreground hover:text-foreground transition-colors"
+            activeProps={{ className: "text-foreground" }}
           >
-            Categories
-          </a>
-          <a
-            href="/#stats"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Stats
-          </a>
+            Rooms
+          </Link>
           {user && (
             <Link
-              to="/rooms"
+              to="/profile"
               className="text-muted-foreground hover:text-foreground transition-colors"
               activeProps={{ className: "text-foreground" }}
             >
-              Rooms
+              Profile
             </Link>
           )}
         </nav>
+
 
         <div className="flex items-center gap-2">
           {!loading &&
