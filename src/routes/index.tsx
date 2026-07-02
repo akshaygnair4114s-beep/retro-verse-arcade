@@ -161,14 +161,15 @@ function HomePage() {
 
       {/* STATS */}
       <section id="stats" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="By the numbers" title="The arcade in motion" />
+        <SectionHeading kicker="By the numbers" title="Nova Hub in motion" />
         <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {[
-            { v: "7", l: "Games live", c: "cyan" as const },
+            { v: String(GAMES.filter((g) => g.available).length), l: "Games live", c: "cyan" as const },
             { v: "15+", l: "Coming soon", c: "magenta" as const },
             { v: "60", l: "FPS target", c: "yellow" as const },
             { v: "∞", l: "High scores", c: "green" as const },
           ].map((s) => (
+
             <div key={s.l} className="glass rounded-xl p-4 sm:p-6 text-center ring-1 ring-white/10">
               <div
                 className={`font-display text-4xl sm:text-5xl font-black ${
