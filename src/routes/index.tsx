@@ -78,35 +78,36 @@ function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-[10px] font-mono uppercase tracking-[0.3em] text-neon-cyan">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-neon-cyan animate-pulse" />
-              Now playing · 7 games live
+              Live · {GAMES.filter((g) => g.available).length} games online
             </div>
             <h1 className="mt-6 font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05]">
-              Play <span className="neon-text-cyan">Legendary</span>
+              Welcome to <span className="neon-text-cyan">Nova</span>{" "}
+              <span className="neon-text-magenta">Hub</span>
               <br />
-              Retro Games <span className="neon-text-magenta">Online</span>
+              <span className="text-foreground/90">Play. Connect. Compete.</span>
             </h1>
             <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-xl">
-              A neon-soaked arcade for the classics. Drop a quarter, no quarter required — just open
-              and play. Progress saves automatically.
+              A premium cosmic gaming platform. Launch classic and modern titles instantly, jump into
+              real-time multiplayer rooms, and climb the galactic leaderboards.
             </p>
             <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
               <Link to="/games" className="btn-neon">
-                ▶ Play Now
+                ▶ Browse Games
               </Link>
-              <a href="#featured" className="btn-ghost-neon">
-                Browse Games
-              </a>
+              <Link to="/rooms" className="btn-ghost-neon">
+                Join a Room
+              </Link>
             </div>
             <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">
               <span>● 60 FPS</span>
-              <span>● Offline saves</span>
-              <span>● Mobile ready</span>
+              <span>● Cross-device saves</span>
+              <span>● Real-time multiplayer</span>
             </div>
           </div>
 
-          {/* Arcade cabinet */}
-          <div className="relative mx-auto w-full max-w-[18rem] sm:max-w-sm md:max-w-md aspect-[3/4] animate-float-slow order-first md:order-none">
-            <ArcadeCabinet />
+          {/* Galaxy hero */}
+          <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-sm md:max-w-md aspect-square animate-float-slow order-first md:order-none">
+            <GalaxySphere />
           </div>
         </div>
 
@@ -124,6 +125,7 @@ function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* FEATURED */}
       <section id="featured" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
