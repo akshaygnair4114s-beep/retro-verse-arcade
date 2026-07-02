@@ -139,7 +139,7 @@ function HomePage() {
 
       {/* CATEGORIES */}
       <section id="categories" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="Browse" title="Pick your poison" />
+        <SectionHeading kicker="Browse" title="Explore the universe" />
         <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {CATEGORIES.map((c, i) => (
             <Link
