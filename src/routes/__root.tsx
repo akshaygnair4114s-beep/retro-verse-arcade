@@ -82,34 +82,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5",
       },
-      { name: "theme-color", content: "#0A0A0F" },
+      { name: "theme-color", content: "#080814" },
       { name: "color-scheme", content: "dark" },
-      { title: "ArcadiaX — Play Legendary Retro Games Online" },
+      { title: "Nova Hub — Play. Connect. Compete." },
       {
         name: "description",
         content:
-          "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, and Chain Reaction. No download, no install, instant play in browser.",
+          "Nova Hub is a premium cosmic gaming platform. Play Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders and Chain Reaction. Compete online in real-time rooms.",
       },
       {
         name: "keywords",
         content:
-          "retro games, browser games, online games, free games, arcade games, Tetris, Snake, Pong, 2048, Sudoku, multiplayer games, play online, no download, browser arcade",
+          "Nova Hub, online games, browser games, free games, arcade, Tetris, Snake, Pong, 2048, Sudoku, multiplayer games, play online",
       },
-      { name: "author", content: "ArcadiaX" },
+      { name: "author", content: "Nova Hub" },
       {
         name: "robots",
         content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
       },
       { name: "googlebot", content: "index, follow" },
-      { property: "og:title", content: "ArcadiaX — Play Legendary Retro Games Online" },
+      { property: "og:title", content: "Nova Hub — Play. Connect. Compete." },
       {
         property: "og:description",
         content:
-          "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku and more. No download, no install, instant play in browser. A neon-soaked arcade experience.",
+          "A premium cosmic gaming platform. Play instantly in your browser and compete with friends in real-time rooms.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://arcadiax.lovable.app" },
-      { property: "og:site_name", content: "ArcadiaX" },
+      { property: "og:site_name", content: "Nova Hub" },
       { property: "og:locale", content: "en_US" },
       {
         property: "og:image",
@@ -120,15 +120,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:height", content: "630" },
       {
         property: "og:image:alt",
-        content: "ArcadiaX - Play Legendary Retro Games Online",
+        content: "Nova Hub — Premium cosmic gaming platform",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@arcadiax" },
-      { name: "twitter:title", content: "ArcadiaX — Play Legendary Retro Games Online" },
+      { name: "twitter:site", content: "@novahub" },
+      { name: "twitter:title", content: "Nova Hub — Play. Connect. Compete." },
       {
         name: "twitter:description",
         content:
-          "Play classic retro games online for free. Tetris, Snake, Pong, 2048 and more. No download required. Neon-soaked arcade experience.",
+          "A premium cosmic gaming platform. Play instantly in your browser and compete with friends in real-time rooms.",
       },
       {
         name: "twitter:image",
@@ -137,17 +137,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         name: "twitter:image:alt",
-        content: "ArcadiaX - Play Legendary Retro Games Online",
+        content: "Nova Hub — Premium cosmic gaming platform",
       },
       { name: "format-detection", content: "telephone=no" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "ArcadiaX" },
-      { name: "application-name", content: "ArcadiaX" },
-      { name: "msapplication-TileColor", content: "#0A0A0F" },
+      { name: "apple-mobile-web-app-title", content: "Nova Hub" },
+      { name: "application-name", content: "Nova Hub" },
+      { name: "msapplication-TileColor", content: "#080814" },
       { name: "msapplication-config", content: "/browserconfig.xml" },
     ],
+
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/manifest.webmanifest" },
