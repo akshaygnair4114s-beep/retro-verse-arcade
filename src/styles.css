@@ -43,46 +43,47 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
-  /* Cyberpunk dark theme — applied site-wide */
-  --background: oklch(0.13 0.03 270);
+  /* Nova Hub — cosmic dark theme */
+  --background: oklch(0.11 0.035 265);
   --foreground: oklch(0.97 0.01 250);
-  --card: oklch(0.18 0.04 270 / 0.55);
+  --card: oklch(0.17 0.04 270 / 0.55);
   --card-foreground: oklch(0.97 0.01 250);
-  --popover: oklch(0.16 0.04 270);
+  --popover: oklch(0.15 0.04 270);
   --popover-foreground: oklch(0.97 0.01 250);
 
-  --primary: oklch(0.84 0.18 215);            /* #00F5FF cyan */
-  --primary-foreground: oklch(0.13 0.03 270);
-  --secondary: oklch(0.68 0.28 348);          /* #FF00AA magenta */
+  --primary: oklch(0.78 0.17 240);            /* electric blue */
+  --primary-foreground: oklch(0.1 0.03 270);
+  --secondary: oklch(0.62 0.24 300);          /* violet */
   --secondary-foreground: oklch(0.98 0.01 250);
-  --accent: oklch(0.92 0.18 100);             /* #FFE600 yellow */
-  --accent-foreground: oklch(0.13 0.03 270);
+  --accent: oklch(0.78 0.2 320);              /* soft magenta */
+  --accent-foreground: oklch(0.1 0.03 270);
 
-  --muted: oklch(0.22 0.03 270);
-  --muted-foreground: oklch(0.72 0.03 260);
+  --muted: oklch(0.2 0.03 270);
+  --muted-foreground: oklch(0.74 0.03 260);
   --destructive: oklch(0.65 0.25 25);
   --destructive-foreground: oklch(0.98 0.01 250);
 
-  --border: oklch(1 0 0 / 0.1);
+  --border: oklch(1 0 0 / 0.09);
   --input: oklch(1 0 0 / 0.12);
-  --ring: oklch(0.84 0.18 215);
+  --ring: oklch(0.78 0.17 240);
 
-  --neon-cyan: oklch(0.86 0.18 215);
-  --neon-magenta: oklch(0.7 0.28 348);
-  --neon-yellow: oklch(0.92 0.18 100);
-  --neon-green: oklch(0.85 0.22 145);
-  --neon-purple: oklch(0.65 0.24 300);
+  --neon-cyan: oklch(0.88 0.14 215);          /* neon cyan */
+  --neon-magenta: oklch(0.72 0.24 328);       /* soft magenta */
+  --neon-yellow: oklch(0.92 0.16 100);
+  --neon-green: oklch(0.86 0.2 165);
+  --neon-purple: oklch(0.66 0.24 295);        /* violet */
 
-  --gradient-hero: radial-gradient(ellipse at 20% 10%, oklch(0.7 0.28 348 / 0.25), transparent 50%),
-                   radial-gradient(ellipse at 80% 30%, oklch(0.84 0.18 215 / 0.25), transparent 50%),
-                   radial-gradient(ellipse at 50% 90%, oklch(0.65 0.24 300 / 0.22), transparent 60%);
-  --gradient-neon: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+  --gradient-hero:
+    radial-gradient(ellipse at 15% 10%, oklch(0.66 0.24 295 / 0.32), transparent 55%),
+    radial-gradient(ellipse at 85% 20%, oklch(0.78 0.17 240 / 0.28), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, oklch(0.72 0.24 328 / 0.22), transparent 60%);
+  --gradient-neon: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-magenta));
 
-  --shadow-neon-cyan: 0 0 20px oklch(0.84 0.18 215 / 0.6), 0 0 40px oklch(0.84 0.18 215 / 0.3);
-  --shadow-neon-magenta: 0 0 20px oklch(0.7 0.28 348 / 0.6), 0 0 40px oklch(0.7 0.28 348 / 0.3);
-  --shadow-glass: 0 8px 32px 0 oklch(0 0 0 / 0.4);
+  --shadow-neon-cyan: 0 0 20px oklch(0.78 0.17 240 / 0.55), 0 0 40px oklch(0.66 0.24 295 / 0.28);
+  --shadow-neon-magenta: 0 0 20px oklch(0.72 0.24 328 / 0.6), 0 0 40px oklch(0.72 0.24 328 / 0.3);
+  --shadow-glass: 0 8px 40px 0 oklch(0 0 0 / 0.5);
 }
 
 .dark {
@@ -106,33 +107,45 @@
   body {
     background-image:
       var(--gradient-hero),
-      linear-gradient(180deg, oklch(0.13 0.03 270), oklch(0.1 0.03 275));
+      radial-gradient(1200px 800px at 50% -10%, oklch(0.22 0.08 275 / 0.7), transparent 70%),
+      linear-gradient(180deg, oklch(0.09 0.03 268), oklch(0.06 0.02 265));
     background-attachment: fixed;
     min-height: 100vh;
   }
 
   button, a { touch-action: manipulation; }
-  /* Allow vertical scrolling on the page while we capture swipes inside specific game boards via JS */
 
-  /* Subtle scanline overlay */
+  /* Cosmic starfield overlay */
   body::before {
+    content: "";
+    position: fixed;
+    inset: -2px;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 12% 22%, oklch(1 0 0 / 0.9), transparent 60%),
+      radial-gradient(1px 1px at 28% 78%, oklch(1 0 0 / 0.7), transparent 60%),
+      radial-gradient(1.2px 1.2px at 44% 12%, oklch(0.9 0.15 210 / 0.9), transparent 60%),
+      radial-gradient(1px 1px at 62% 46%, oklch(1 0 0 / 0.6), transparent 60%),
+      radial-gradient(1.4px 1.4px at 76% 88%, oklch(0.9 0.15 300 / 0.9), transparent 60%),
+      radial-gradient(1px 1px at 88% 32%, oklch(1 0 0 / 0.8), transparent 60%),
+      radial-gradient(1px 1px at 6% 68%, oklch(1 0 0 / 0.6), transparent 60%),
+      radial-gradient(1.2px 1.2px at 54% 92%, oklch(1 0 0 / 0.7), transparent 60%);
+    z-index: 1;
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+
+  body::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 2px,
-      oklch(1 0 0 / 0.015) 3px,
-      transparent 4px
-    );
+    background: radial-gradient(600px 400px at 80% 85%, oklch(0.88 0.14 215 / 0.06), transparent 70%);
     z-index: 1;
-    mix-blend-mode: overlay;
   }
 
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
 }
+
 
 @utility glass {
   background: oklch(1 0 0 / 0.05);

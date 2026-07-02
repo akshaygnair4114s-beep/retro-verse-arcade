@@ -12,12 +12,12 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: generateSEO({
-      title: "ArcadiaX — Play Legendary Retro Games",
+      title: "Nova Hub — Play. Connect. Compete.",
       description:
-        "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, no install, instant browser play. A neon-soaked arcade experience with 60 FPS gameplay and mobile support.",
+        "Nova Hub is a premium cosmic gaming platform. Play Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders and Chain Reaction. Compete online in real-time multiplayer rooms.",
       keywords: [
-        "free online games",
-        "retro games",
+        "Nova Hub",
+        "online games",
         "browser games",
         "arcade games",
         "play Tetris online",
@@ -28,7 +28,6 @@ export const Route = createFileRoute("/")({
         "multiplayer games",
         "no download games",
         "instant play",
-        "browser arcade",
         "mobile games",
       ],
       canonical: "/",
@@ -54,6 +53,7 @@ export const Route = createFileRoute("/")({
 
 const FEATURED = ["snakes-ladders", "tetris", "snake", "sudoku", "2048", "memory"];
 
+
 function HomePage() {
   const featured = GAMES.filter((g) => FEATURED.includes(g.id));
   const tickerGames = [...GAMES, ...GAMES];
@@ -78,35 +78,36 @@ function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-[10px] font-mono uppercase tracking-[0.3em] text-neon-cyan">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-neon-cyan animate-pulse" />
-              Now playing · 7 games live
+              Live · {GAMES.filter((g) => g.available).length} games online
             </div>
             <h1 className="mt-6 font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05]">
-              Play <span className="neon-text-cyan">Legendary</span>
+              Welcome to <span className="neon-text-cyan">Nova</span>{" "}
+              <span className="neon-text-magenta">Hub</span>
               <br />
-              Retro Games <span className="neon-text-magenta">Online</span>
+              <span className="text-foreground/90">Play. Connect. Compete.</span>
             </h1>
             <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-xl">
-              A neon-soaked arcade for the classics. Drop a quarter, no quarter required — just open
-              and play. Progress saves automatically.
+              A premium cosmic gaming platform. Launch classic and modern titles instantly, jump into
+              real-time multiplayer rooms, and climb the galactic leaderboards.
             </p>
             <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
               <Link to="/games" className="btn-neon">
-                ▶ Play Now
+                ▶ Browse Games
               </Link>
-              <a href="#featured" className="btn-ghost-neon">
-                Browse Games
-              </a>
+              <Link to="/rooms" className="btn-ghost-neon">
+                Join a Room
+              </Link>
             </div>
             <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-muted-foreground">
               <span>● 60 FPS</span>
-              <span>● Offline saves</span>
-              <span>● Mobile ready</span>
+              <span>● Cross-device saves</span>
+              <span>● Real-time multiplayer</span>
             </div>
           </div>
 
-          {/* Arcade cabinet */}
-          <div className="relative mx-auto w-full max-w-[18rem] sm:max-w-sm md:max-w-md aspect-[3/4] animate-float-slow order-first md:order-none">
-            <ArcadeCabinet />
+          {/* Galaxy hero */}
+          <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-sm md:max-w-md aspect-square animate-float-slow order-first md:order-none">
+            <GalaxySphere />
           </div>
         </div>
 
@@ -125,9 +126,10 @@ function HomePage() {
         </div>
       </section>
 
+
       {/* FEATURED */}
       <section id="featured" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="Featured" title="Tonight's hot tables" />
+        <SectionHeading kicker="Featured" title="Featured Games" />
         <div className="mt-8 sm:mt-10 grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((g) => (
             <GameCard key={g.id} game={g} />
@@ -137,7 +139,7 @@ function HomePage() {
 
       {/* CATEGORIES */}
       <section id="categories" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="Browse" title="Pick your poison" />
+        <SectionHeading kicker="Browse" title="Explore the universe" />
         <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {CATEGORIES.map((c, i) => (
             <Link
@@ -159,14 +161,15 @@ function HomePage() {
 
       {/* STATS */}
       <section id="stats" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="By the numbers" title="The arcade in motion" />
+        <SectionHeading kicker="By the numbers" title="Nova Hub in motion" />
         <div className="mt-8 sm:mt-10 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {[
-            { v: "7", l: "Games live", c: "cyan" as const },
+            { v: String(GAMES.filter((g) => g.available).length), l: "Games live", c: "cyan" as const },
             { v: "15+", l: "Coming soon", c: "magenta" as const },
             { v: "60", l: "FPS target", c: "yellow" as const },
             { v: "∞", l: "High scores", c: "green" as const },
           ].map((s) => (
+
             <div key={s.l} className="glass rounded-xl p-4 sm:p-6 text-center ring-1 ring-white/10">
               <div
                 className={`font-display text-4xl sm:text-5xl font-black ${
@@ -201,10 +204,10 @@ function HomePage() {
               More games coming soon
             </h3>
             <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
-              Breakout, Space Invaders, Pac-Man, Asteroids, Chess, Minesweeper and 9 more titles are
-              loading into the cabinet. Online multiplayer, achievements and ranked ladders are next
-              on the queue.
+              Breakout, Space Invaders, Maze Muncher, Asteroids, Chess and Minesweeper are warping
+              in soon. Ranked ladders, achievements and tournaments are next on the star map.
             </p>
+
           </div>
         </div>
       </section>
@@ -242,145 +245,121 @@ function categoryBlurb(c: string) {
   }
 }
 
-function ArcadeCabinet() {
+function GalaxySphere() {
   return (
     <svg
-      viewBox="0 0 300 400"
-      className="w-full h-full drop-shadow-[0_0_40px_oklch(0.84_0.18_215/0.4)]"
+      viewBox="0 0 400 400"
+      className="w-full h-full drop-shadow-[0_0_60px_oklch(0.66_0.24_295/0.5)]"
     >
       <defs>
-        <linearGradient id="cab" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#1a1030" />
-          <stop offset="100%" stopColor="#0a0a0f" />
-        </linearGradient>
-        <linearGradient id="screen" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#00F5FF" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#FF00AA" stopOpacity="0.9" />
+        <radialGradient id="galaxy-core" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="18%" stopColor="#e0f2fe" stopOpacity="0.95" />
+          <stop offset="45%" stopColor="#7dd3fc" stopOpacity="0.85" />
+          <stop offset="75%" stopColor="#a855f7" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="galaxy-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.5" />
+          <stop offset="60%" stopColor="#0ea5e9" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="galaxy-ring" x1="0" x2="1" y1="0.5" y2="0.5">
+          <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.9" />
+          <stop offset="50%" stopColor="#a855f7" stopOpacity="0.95" />
+          <stop offset="100%" stopColor="#ec4899" stopOpacity="0.9" />
         </linearGradient>
       </defs>
-      {/* body */}
-      <path
-        d="M30 20 Q30 0 50 0 L250 0 Q270 0 270 20 L290 380 Q290 400 270 400 L30 400 Q10 400 10 380 Z"
-        fill="url(#cab)"
-        stroke="#00F5FF"
-        strokeWidth="2"
-      />
-      {/* marquee */}
-      <rect
-        x="40"
-        y="15"
-        width="220"
-        height="40"
-        rx="6"
-        fill="#0a0a0f"
-        stroke="#FF00AA"
-        strokeWidth="1.5"
-      />
-      <text
-        x="150"
-        y="42"
-        textAnchor="middle"
-        fill="#FF00AA"
-        fontFamily="Orbitron, sans-serif"
-        fontWeight="900"
-        fontSize="18"
-        style={{ filter: "drop-shadow(0 0 6px #FF00AA)" }}
-      >
-        ARCADIAX
-      </text>
-      {/* screen */}
-      <rect
-        x="45"
-        y="70"
-        width="210"
-        height="160"
-        rx="8"
-        fill="#0a0a0f"
-        stroke="#00F5FF"
-        strokeWidth="2"
-      />
-      <rect x="55" y="80" width="190" height="140" rx="4" fill="url(#screen)" opacity="0.25" />
-      {/* pixel art on screen */}
-      {Array.from({ length: 10 }).map((_, i) => (
-        <rect
-          key={i}
-          x={70 + (i % 5) * 30}
-          y={120 + Math.floor(i / 5) * 30}
-          width="20"
-          height="20"
-          fill={i % 2 ? "#00F5FF" : "#FFE600"}
-          opacity="0.7"
-        >
-          <animate
-            attributeName="opacity"
-            values="0.3;0.9;0.3"
-            dur={`${2 + i * 0.2}s`}
-            repeatCount="indefinite"
-          />
-        </rect>
-      ))}
-      {/* control panel */}
-      <rect
-        x="35"
-        y="245"
-        width="230"
-        height="80"
-        rx="6"
-        fill="#15101e"
-        stroke="#00F5FF"
-        strokeWidth="1.5"
-      />
-      <circle
-        cx="80"
-        cy="285"
-        r="18"
-        fill="#FF00AA"
-        style={{ filter: "drop-shadow(0 0 8px #FF00AA)" }}
-      />
-      <circle cx="80" cy="285" r="8" fill="#0a0a0f" />
-      <circle
-        cx="170"
-        cy="278"
-        r="10"
-        fill="#FFE600"
-        style={{ filter: "drop-shadow(0 0 6px #FFE600)" }}
-      />
-      <circle
+
+      {/* soft nebula halo */}
+      <circle cx="200" cy="200" r="190" fill="url(#galaxy-glow)" />
+
+      {/* stars */}
+      {Array.from({ length: 40 }).map((_, i) => {
+        const angle = (i / 40) * Math.PI * 2;
+        const r = 60 + ((i * 37) % 130);
+        const x = 200 + Math.cos(angle) * r;
+        const y = 200 + Math.sin(angle) * r * 0.9;
+        const size = (i % 5) * 0.3 + 0.6;
+        return (
+          <circle
+            key={i}
+            cx={x}
+            cy={y}
+            r={size}
+            fill={i % 3 === 0 ? "#7dd3fc" : i % 3 === 1 ? "#c084fc" : "#ffffff"}
+            opacity={0.5 + (i % 5) * 0.1}
+          >
+            <animate
+              attributeName="opacity"
+              values="0.3;0.9;0.3"
+              dur={`${2 + (i % 4)}s`}
+              repeatCount="indefinite"
+            />
+          </circle>
+        );
+      })}
+
+      {/* orbital rings */}
+      <ellipse
         cx="200"
-        cy="290"
-        r="10"
-        fill="#00F5FF"
-        style={{ filter: "drop-shadow(0 0 6px #00F5FF)" }}
-      />
-      <circle
-        cx="230"
-        cy="278"
-        r="10"
-        fill="#FF00AA"
-        style={{ filter: "drop-shadow(0 0 6px #FF00AA)" }}
-      />
-      {/* base */}
-      <rect
-        x="20"
-        y="340"
-        width="260"
-        height="40"
-        rx="4"
-        fill="#0a0a0f"
-        stroke="#FF00AA"
+        cy="200"
+        rx="170"
+        ry="55"
+        fill="none"
+        stroke="url(#galaxy-ring)"
         strokeWidth="1.5"
+        transform="rotate(-22 200 200)"
+        opacity="0.85"
       />
-      <text
-        x="150"
-        y="367"
-        textAnchor="middle"
-        fill="#FFE600"
-        fontFamily="Orbitron"
-        fontWeight="900"
-        fontSize="12"
-      >
-        INSERT COIN
-      </text>
+      <ellipse
+        cx="200"
+        cy="200"
+        rx="160"
+        ry="40"
+        fill="none"
+        stroke="url(#galaxy-ring)"
+        strokeWidth="1"
+        transform="rotate(24 200 200)"
+        opacity="0.55"
+      />
+      <ellipse
+        cx="200"
+        cy="200"
+        rx="180"
+        ry="70"
+        fill="none"
+        stroke="url(#galaxy-ring)"
+        strokeWidth="0.75"
+        transform="rotate(6 200 200)"
+        opacity="0.35"
+      />
+
+      {/* galaxy sphere core */}
+      <circle cx="200" cy="200" r="110" fill="url(#galaxy-core)" />
+
+      {/* moon accent */}
+      <circle cx="320" cy="110" r="18" fill="#e5e7eb" opacity="0.9" />
+      <circle cx="326" cy="106" r="14" fill="#0b0b1a" opacity="0.55" />
+
+      {/* orbital dot */}
+      <circle cx="60" cy="230" r="3" fill="#22d3ee">
+        <animate
+          attributeName="opacity"
+          values="0.4;1;0.4"
+          dur="2.5s"
+          repeatCount="indefinite"
+        />
+      </circle>
+      <circle cx="360" cy="260" r="2.5" fill="#ec4899">
+        <animate
+          attributeName="opacity"
+          values="0.4;1;0.4"
+          dur="3s"
+          repeatCount="indefinite"
+        />
+      </circle>
     </svg>
   );
 }
+

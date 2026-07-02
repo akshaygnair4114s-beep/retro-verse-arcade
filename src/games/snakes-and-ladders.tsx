@@ -948,10 +948,13 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
         if (mounted) setLoading(false);
 
         const channel = supabase.channel(`snakes-ladders:${roomCode}`, {
-          private: true,
-          presence: { key: user.id },
-          broadcast: { self: false },
-        });
+          config: {
+            private: true,
+            presence: { key: user.id },
+            broadcast: { self: false },
+          },
+        } as any);
+
 
         channelRef.current = channel;
 

@@ -1,10 +1,10 @@
 import type { GameMeta } from "./games";
 
 export const SITE_URL = "https://arcadiax.lovable.app";
-export const SITE_NAME = "ArcadiaX";
-export const SITE_TAGLINE = "Play Legendary Retro Games Online";
+export const SITE_NAME = "Nova Hub";
+export const SITE_TAGLINE = "Play. Connect. Compete.";
 export const DEFAULT_IMAGE =
-  "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&w=1200&h=630&fit=crop";
+  "https://images.pexels.com/photos/1169754/pexels-photo-1169754.jpeg?auto=compress&w=1200&h=630&fit=crop";
 
 export type SEOProps = {
   title: string;
@@ -17,11 +17,13 @@ export type SEOProps = {
 };
 
 export function generateSEO(seo: SEOProps) {
-  const fullTitle = seo.title.includes("ArcadiaX")
-    ? seo.title
-    : `${seo.title} — ArcadiaX`;
+  const fullTitle =
+    seo.title.includes("Nova Hub") || seo.title.includes("ArcadiaX")
+      ? seo.title.replace("ArcadiaX", "Nova Hub")
+      : `${seo.title} — Nova Hub`;
   const url = seo.canonical ? `${SITE_URL}${seo.canonical}` : SITE_URL;
   const image = seo.image || DEFAULT_IMAGE;
+
 
   const meta: Record<string, string>[] = [
     { title: fullTitle },
