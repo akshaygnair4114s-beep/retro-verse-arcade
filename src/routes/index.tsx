@@ -12,12 +12,12 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: generateSEO({
-      title: "ArcadiaX — Play Legendary Retro Games",
+      title: "Nova Hub — Play. Connect. Compete.",
       description:
-        "Play classic retro games online for free. Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders, Chain Reaction. No download, no install, instant browser play. A neon-soaked arcade experience with 60 FPS gameplay and mobile support.",
+        "Nova Hub is a premium cosmic gaming platform. Play Tetris, Snake, Pong, 2048, Sudoku, Tic-Tac-Toe, Memory Match, Snakes & Ladders and Chain Reaction. Compete online in real-time multiplayer rooms.",
       keywords: [
-        "free online games",
-        "retro games",
+        "Nova Hub",
+        "online games",
         "browser games",
         "arcade games",
         "play Tetris online",
@@ -28,7 +28,6 @@ export const Route = createFileRoute("/")({
         "multiplayer games",
         "no download games",
         "instant play",
-        "browser arcade",
         "mobile games",
       ],
       canonical: "/",
@@ -53,6 +52,7 @@ export const Route = createFileRoute("/")({
 });
 
 const FEATURED = ["snakes-ladders", "tetris", "snake", "sudoku", "2048", "memory"];
+
 
 function HomePage() {
   const featured = GAMES.filter((g) => FEATURED.includes(g.id));
