@@ -228,9 +228,14 @@ export function SiteFooter() {
     <footer className="relative z-10 mt-16 sm:mt-24 border-t border-white/10 glass">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 grid gap-8 md:grid-cols-3">
         <div>
-          <div className="font-display text-xl font-black neon-text-cyan">ARCADIAX</div>
-          <p className="mt-2 text-sm text-muted-foreground max-w-xs">
-            A neon-soaked arcade for the games that made us. Built for the browser, tuned for 60fps.
+          <div className="flex items-center gap-3">
+            <NovaLogo className="h-9 w-9" />
+            <div className="font-display text-xl font-black neon-text-cyan tracking-[0.18em]">
+              NOVA HUB
+            </div>
+          </div>
+          <p className="mt-3 text-sm text-muted-foreground max-w-xs">
+            A premium cosmic gaming platform. Play. Connect. Compete — instantly in your browser.
           </p>
         </div>
         <div>
@@ -277,14 +282,63 @@ export function SiteFooter() {
             Now Live
           </div>
           <p className="text-sm text-muted-foreground">
-            Online multiplayer rooms, Google sign-in, ranked ladders, friends, achievements,
-            tournaments and 15+ more games.
+            Real-time multiplayer rooms, cross-device profiles, ranked ladders, friends, achievements
+            and more premium titles landing in the galaxy.
           </p>
         </div>
       </div>
       <div className="border-t border-white/5 py-4 px-4 text-center text-xs text-muted-foreground font-mono">
-        © {new Date().getFullYear()} ArcadiaX — INSERT COIN
+        © {new Date().getFullYear()} Nova Hub — Play. Connect. Compete.
       </div>
     </footer>
   );
 }
+
+export function NovaLogo({ className = "h-10 w-10" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <radialGradient id="nova-core" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+          <stop offset="30%" stopColor="#7dd3fc" stopOpacity="0.95" />
+          <stop offset="65%" stopColor="#a855f7" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="nova-ring" x1="0" x2="1" y1="0.5" y2="0.5">
+          <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.9" />
+          <stop offset="50%" stopColor="#a855f7" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#ec4899" stopOpacity="0.9" />
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30" fill="#05050d" />
+      <circle cx="32" cy="32" r="18" fill="url(#nova-core)" />
+      <ellipse
+        cx="32"
+        cy="32"
+        rx="28"
+        ry="9"
+        fill="none"
+        stroke="url(#nova-ring)"
+        strokeWidth="1.5"
+        transform="rotate(-24 32 32)"
+        opacity="0.9"
+      />
+      <ellipse
+        cx="32"
+        cy="32"
+        rx="26"
+        ry="6"
+        fill="none"
+        stroke="url(#nova-ring)"
+        strokeWidth="1"
+        transform="rotate(18 32 32)"
+        opacity="0.6"
+      />
+      <circle cx="14" cy="20" r="0.8" fill="#ffffff" />
+      <circle cx="50" cy="16" r="0.6" fill="#7dd3fc" />
+      <circle cx="52" cy="48" r="0.8" fill="#ffffff" />
+      <circle cx="12" cy="46" r="0.6" fill="#c084fc" />
+    </svg>
+  );
+}
+
