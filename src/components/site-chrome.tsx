@@ -280,11 +280,11 @@ export function SiteFooter() {
         </div>
         <div>
           <div className="font-display text-xs uppercase tracking-widest text-muted-foreground mb-3">
-            Coming soon
+            Now Live
           </div>
           <p className="text-sm text-muted-foreground">
-            Online multiplayer, ranked ladders, friends, achievements, tournaments and 15+ more
-            games.
+            Online multiplayer rooms, Google sign-in, ranked ladders, friends, achievements,
+            tournaments and 15+ more games.
           </p>
         </div>
       </div>

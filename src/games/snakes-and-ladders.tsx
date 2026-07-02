@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearch, useNavigate, Link } from "@tanstack/react-router";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
 
 // ── Color palette for up to 10 players ──────────────────────────────────
 const COLORS = [
@@ -864,10 +867,225 @@ function GameBoard({ initial, onNewGame }: { initial: Player[]; onNewGame: () =>
   );
 }
 
+// ── Online multiplayer wrapper ─────────────────────────────────────────────
+function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [opponent, setOpponent] = useState<{ id: string; username: string } | null>(null);
+  const [opponentConnected, setOpponentConnected] = useState(false);
+  const [mySlot, setMySlot] = useState(0);
+  const [started, setStarted] = useState(false);
+  const [initialPlayers, setInitialPlayers] = useState<Player[] | null>(null);
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const startRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      navigate({ to: "/login" });
+      return;
+    }
+
+    let mounted = true;
+
+    (async () => {
+      try {
+        const { data: room, error: roomErr } = await supabase
+          .from("game_rooms")
+          .select("id, game_type, status, max_players")
+          .eq("code", roomCode)
+          .maybeSingle();
+
+        if (roomErr || !room) {
+          if (mounted) setError("Room not found");
+          return;
+        }
+
+        const gt = (room.game_type || "").toLowerCase().replace(/-/g, "");
+        if (gt !== "snakesladders" && gt !== "snakesandladders") {
+          if (mounted) setError("This room is for a different game");
+          return;
+        }
+
+        const { data: participants } = await supabase
+          .from("room_participants")
+          .select("id, user_id, joined_at, profile:profiles!room_participants_user_id_profiles_fkey(username)")
+          .eq("room_id", room.id)
+          .order("joined_at", { ascending: true });
+
+        if (!participants || participants.length === 0) {
+          if (mounted) setError("No participants in room");
+          return;
+        }
+
+        const slot = participants.findIndex((p) => p.user_id === user.id);
+        if (slot === -1) {
+          if (participants.length >= room.max_players) {
+            if (mounted) setError("Room is full");
+            return;
+          }
+          const { error: joinErr } = await supabase.from("room_participants").insert({
+            room_id: room.id,
+            user_id: user.id,
+            is_ready: true,
+          });
+          if (joinErr) {
+            if (mounted) setError("Failed to join room: " + joinErr.message);
+            return;
+          }
+          if (mounted) setMySlot(participants.length);
+        } else {
+          if (mounted) setMySlot(slot);
+        }
+
+        const otherP = participants.find((p) => p.user_id !== user.id);
+        if (otherP && mounted) {
+          const profileData = otherP.profile as unknown as { username: string } | null;
+          setOpponent({ id: otherP.user_id, username: profileData?.username || "Player" });
+        }
+
+        if (mounted) setLoading(false);
+
+        const channel = supabase.channel(`snakes-ladders:${roomCode}`, {
+          private: true,
+          presence: { key: user.id },
+          broadcast: { self: false },
+        });
+
+        channelRef.current = channel;
+
+        channel
+          .on("presence", { event: "sync" }, () => {
+            const state = channel.presenceState();
+            const count = Object.keys(state).length;
+            if (mounted) setOpponentConnected(count >= 2);
+          })
+          .on("broadcast", { event: "start" }, () => {
+            if (mounted) setStarted(true);
+          })
+          .on("broadcast", { event: "leave" }, () => {
+            if (mounted) setOpponentConnected(false);
+          })
+          .subscribe(async (status) => {
+            if (status === "SUBSCRIBED") {
+              await channel.track({ user_id: user.id });
+            }
+          });
+      } catch {
+        if (mounted) setError("Failed to connect");
+      }
+    })();
+
+    return () => {
+      mounted = false;
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+        channelRef.current = null;
+      }
+    };
+  }, [roomCode, user, navigate]);
+
+  useEffect(() => {
+    if (started && !initialPlayers) {
+      const names = ["You", opponent?.username || "Player 2"];
+      setInitialPlayers([
+        { name: mySlot === 0 ? names[0] : names[1], pos: 0, colorIdx: mySlot === 0 ? 0 : 1 },
+        { name: mySlot === 0 ? names[1] : names[0], pos: 0, colorIdx: mySlot === 0 ? 1 : 0 },
+      ]);
+    }
+  }, [started, initialPlayers, opponent, mySlot]);
+
+  const handleStart = () => {
+    channelRef.current?.send({ type: "broadcast", event: "start", payload: {} });
+    setStarted(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="grid place-items-center py-20">
+        <div className="text-neon-cyan font-mono animate-pulse">Connecting to room {roomCode}…</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="grid place-items-center py-20 text-center">
+        <div>
+          <div className="text-neon-magenta font-display text-xl mb-3">{error}</div>
+          <button onClick={onExit} className="btn-ghost-neon">Back to Menu</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!started) {
+    return (
+      <div className="grid place-items-center py-12">
+        <div className="glass rounded-xl p-6 max-w-md w-full text-center">
+          <div className="font-mono text-xs uppercase tracking-[0.4em] text-neon-yellow mb-2">
+            Room {roomCode}
+          </div>
+          <h2 className="font-display text-2xl font-black neon-text-cyan mb-4">
+            Snakes & Ladders
+          </h2>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <span className={`w-3 h-3 rounded-full ${opponentConnected ? "bg-neon-green" : "bg-muted-foreground/40"}`} />
+            <span className="text-sm font-mono">
+              {opponentConnected ? "Opponent connected" : "Waiting for opponent…"}
+            </span>
+          </div>
+          {opponent && (
+            <div className="text-sm text-muted-foreground mb-4">
+              vs <span className="text-neon-cyan font-mono">{opponent.username}</span>
+            </div>
+          )}
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={handleStart}
+              disabled={!opponentConnected}
+              className="btn-neon disabled:opacity-50"
+            >
+              Start Match
+            </button>
+            <button onClick={onExit} className="btn-ghost-neon">Leave</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!initialPlayers) return null;
+
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className={`w-2.5 h-2.5 rounded-full ${opponentConnected ? "bg-neon-green" : "bg-neon-magenta"}`} />
+          <span className="text-xs font-mono">
+            {opponentConnected ? "● Live" : "● Reconnecting…"}
+          </span>
+        </div>
+        <button onClick={onExit} className="btn-ghost-neon !text-xs">Leave Room</button>
+      </div>
+      <GameBoard initial={initialPlayers} onNewGame={() => setInitialPlayers(null)} />
+    </div>
+  );
+}
+
 // ── Root export ───────────────────────────────────────────────────────────
 export default function SnakesAndLadders() {
-  const [phase, setPhase] = useState<"setup" | "rules" | "game">("setup");
+  const search = useSearch({ strict: false }) as { room?: string };
+  const roomCode = typeof search?.room === "string" ? search.room.toUpperCase() : null;
+  const [phase, setPhase] = useState<"setup" | "rules" | "game" | "online">(
+    roomCode ? "online" : "setup",
+  );
   const [players, setPlayers] = useState<Player[]>([]);
+
+  if (phase === "online" && roomCode) {
+    return <OnlineGame roomCode={roomCode} onExit={() => setPhase("setup")} />;
+  }
 
   if (phase === "setup") {
     return (

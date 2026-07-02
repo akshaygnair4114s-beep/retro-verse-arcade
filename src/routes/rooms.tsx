@@ -27,6 +27,7 @@ const GAME_OPTIONS = [
   { id: "pong", name: "Pong", players: 2 },
   { id: "tictactoe", name: "Tic-Tac-Toe", players: 2 },
   { id: "memory", name: "Memory", players: 4 },
+  { id: "snakes-ladders", name: "Snakes & Ladders", players: 2 },
   { id: "sudoku", name: "Sudoku", players: 1 },
   { id: "g2048", name: "2048", players: 1 },
 ];

@@ -14,6 +14,7 @@ type AuthState = {
 type AuthContextType = AuthState & {
   signUp: (email: string, password: string, username: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  signInWithGoogle: () => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: string | null }>;
@@ -214,6 +215,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const signInWithGoogle = useCallback(async (): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/profile` },
+    });
+    return { error: error?.message ?? null };
+  }, []);
+
   const resetPassword = useCallback(async (email: string): Promise<{ error: string | null }> => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
@@ -257,6 +266,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ...state,
         signUp,
         signIn,
+        signInWithGoogle,
         signOut,
         resetPassword,
         updateProfile,
