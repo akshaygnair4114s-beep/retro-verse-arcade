@@ -27,6 +27,19 @@ export const Route = createFileRoute("/signup")({
 function SignUpPage() {
   const navigate = useNavigate();
   const { signUp, signInWithGoogle, loading } = useAuth();
+  const [googleError, setGoogleError] = useState<string | null>(null);
+
+  const handleGoogle = async () => {
+    setGoogleError(null);
+    const { error } = await signInWithGoogle();
+    if (error) {
+      setGoogleError(
+        error.includes("not configured") || error.includes("not enabled")
+          ? "Google sign-in isn't enabled yet. Use email/password for now."
+          : error,
+      );
+    }
+  };
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -191,7 +204,7 @@ function SignUpPage() {
           </div>
 
           <button
-            onClick={() => signInWithGoogle()}
+            onClick={() => handleGoogle()}
             disabled={loading}
             className="mt-4 w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg bg-white text-gray-900 font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50"
           >
@@ -203,6 +216,9 @@ function SignUpPage() {
             </svg>
             Sign up with Google
           </button>
+          {googleError && (
+            <p className="mt-2 text-sm text-neon-magenta text-center font-mono">{googleError}</p>
+          )}
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">

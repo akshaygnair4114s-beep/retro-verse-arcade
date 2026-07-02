@@ -78,6 +78,7 @@ function getClient(): SupabaseClient {
               if (authProp === "onAuthStateChange") return (_evt: unknown, _cb: unknown) => ({ data: { subscription: { unsubscribe: () => {} } } });
               if (authProp === "signUp") return async () => ({ data: { user: null, session: null }, error: { message: "Supabase not configured" } });
               if (authProp === "signInWithPassword") return async () => ({ data: { user: null, session: null }, error: { message: "Supabase not configured" } });
+              if (authProp === "signInWithOAuth") return async () => ({ data: { url: null, provider: null }, error: { message: "Supabase not configured" } });
               if (authProp === "signOut") return async () => ({});
               if (authProp === "resetPasswordForEmail") return async () => ({ error: { message: "Supabase not configured" } });
               return async () => ({ data: null, error: { message: "Supabase not configured" } });
