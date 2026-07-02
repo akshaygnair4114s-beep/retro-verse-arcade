@@ -394,7 +394,7 @@ function OnlineGame({ roomCode, onExit }: { roomCode: string; onExit: () => void
   useEffect(() => {
     if (!roomId || !user) return;
     const ch = supabase.channel(`chain-reaction:${roomCode}`, {
-      config: { presence: { key: user.id }, broadcast: { self: false } },
+      config: { private: true, presence: { key: user.id }, broadcast: { self: false } },
     });
     channelRef.current = ch;
 
