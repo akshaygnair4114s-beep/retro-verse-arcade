@@ -129,7 +129,7 @@ function HomePage() {
 
       {/* FEATURED */}
       <section id="featured" className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14 sm:py-20">
-        <SectionHeading kicker="Featured" title="Tonight's hot tables" />
+        <SectionHeading kicker="Featured" title="Featured Games" />
         <div className="mt-8 sm:mt-10 grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((g) => (
             <GameCard key={g.id} game={g} />
