@@ -204,10 +204,10 @@ function HomePage() {
               More games coming soon
             </h3>
             <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
-              Breakout, Space Invaders, Pac-Man, Asteroids, Chess, Minesweeper and 9 more titles are
-              loading into the cabinet. Online multiplayer, achievements and ranked ladders are next
-              on the queue.
+              Breakout, Space Invaders, Maze Muncher, Asteroids, Chess and Minesweeper are warping
+              in soon. Ranked ladders, achievements and tournaments are next on the star map.
             </p>
+
           </div>
         </div>
       </section>
